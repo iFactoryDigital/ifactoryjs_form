@@ -15,7 +15,11 @@ class ImageField {
 
     // bind methods
     this.submit = this.submit.bind(this);
-    this.sanitise = this.sanitise.bind(this);
+    this.render = this.render.bind(this);
+
+    // set meta
+    this.title = 'Image';
+    this.description = 'Image Field';
   }
 
   /**
@@ -49,7 +53,7 @@ class ImageField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*}      value
@@ -68,13 +72,13 @@ class ImageField {
       // check image
       if (!image) return;
 
-      // sanitise
-      return await image.sanitise();
+      // render
+      return await image.render();
     }))).filter(val => val);
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*} value

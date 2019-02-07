@@ -13,7 +13,11 @@ class RadioField {
     // bind methods
     this.submit = this.submit.bind(this);
     this.update = this.update.bind(this);
-    this.sanitise = this.sanitise.bind(this);
+    this.render = this.render.bind(this);
+
+    // set meta
+    this.title = 'Radio';
+    this.description = 'Radio Field';
   }
 
   /**
@@ -49,7 +53,7 @@ class RadioField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*}      value
@@ -65,7 +69,7 @@ class RadioField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*} value

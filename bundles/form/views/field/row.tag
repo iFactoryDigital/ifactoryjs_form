@@ -1,20 +1,20 @@
-<block-row>
-  <block ref="block" class="block-row-inner" on-row-class={ onRowClass } on-center-vertically={ onCenterVertically } get-blocks={ getBlocks } get-element={ getElement }>
+<field-row>
+  <field ref="field" class="field-row-inner" on-row-class={ onRowClass } on-center-vertically={ onCenterVertically } get-fields={ getFields } get-element={ getElement }>
     <yield to="body">
       <span class="eden-dropzone-label" if={ this.acl.validate('admin') && !opts.preview }>
         Row #{ opts.placement }
       </span>
-      <eden-add type="top" onclick={ opts.onAddBlock } way="unshift" placement={ opts.placement + '.children' } if={ this.acl.validate('admin') && !opts.preview } />
+      <eden-add type="top" onclick={ opts.onAddField } way="unshift" placement={ opts.placement + '.children' } if={ this.acl.validate('admin') && !opts.preview } />
       
-      <div class="{ opts.block.row || 'row row-eq-height' } { this.acl.validate('admin') && !opts.preview ? 'eden-dropzone' : '' } { 'empty' : !opts.getBlocks(opts.block.children).length }" data-placement={ opts.placement + '.children' }>
-        <div if={ !opts.getBlocks(opts.block.children).length } class="col py-5 text-center">Add Elements</div>
-        <div if={ opts.block.centerVertically } each={ child, a in opts.getBlocks(opts.block.children) } no-reorder class="{ child.class || 'col' } d-flex align-items-center" data-block={ child.uuid } placement={ opts.placement + '.children.' + a }>
-          <div data-is={ opts.getElement(child) } class="w-100" preview={ opts.preview } data={ opts.getBlock(child) } block={ child } get-block={ opts.getBlock } on-add-block={ opts.onAddBlock } on-save={ opts.onSave } on-remove={ opts.onRemove } on-refresh={ opts.onRefresh } i={ a } placement={ opts.placement + '.children.' + a } />
+      <div class="{ opts.field.row || 'row row-eq-height' } { this.acl.validate('admin') && !opts.preview ? 'eden-dropzone' : '' } { 'empty' : !opts.getFields(opts.field.children).length }" data-placement={ opts.placement + '.children' }>
+        <div if={ !opts.getFields(opts.field.children).length } class="col py-5 text-center">Add Elements</div>
+        <div if={ opts.field.centerVertically } each={ child, a in opts.getFields(opts.field.children) } no-reorder class="{ child.class || 'col' } d-flex align-items-center" data-field={ child.uuid } placement={ opts.placement + '.children.' + a }>
+          <div data-is={ opts.getElement(child) } class="w-100" preview={ opts.preview } data={ opts.getField(child) } field={ child } get-field={ opts.getField } on-add-field={ opts.onAddField } on-save={ opts.onSave } on-remove={ opts.onRemove } on-refresh={ opts.onRefresh } i={ a } placement={ opts.placement + '.children.' + a } />
         </div>
-        <div if={ !opts.block.centerVertically } each={ child, a in opts.getBlocks(opts.block.children) } no-reorder class={ child.class || 'col' } data-is={ opts.getElement(child) } preview={ opts.preview } data-block={ child.uuid } data={ opts.getBlock(child) } block={ child } get-block={ opts.getBlock } on-add-block={ opts.onAddBlock } on-save={ opts.onSave } on-remove={ opts.onRemove } on-refresh={ opts.onRefresh } i={ a } placement={ opts.placement + '.children.' + a } />
+        <div if={ !opts.field.centerVertically } each={ child, a in opts.getFields(opts.field.children) } no-reorder class={ child.class || 'col' } data-is={ opts.getElement(child) } preview={ opts.preview } data-field={ child.uuid } data={ opts.getField(child) } field={ child } get-field={ opts.getField } on-add-field={ opts.onAddField } on-save={ opts.onSave } on-remove={ opts.onRemove } on-refresh={ opts.onRefresh } i={ a } placement={ opts.placement + '.children.' + a } />
       </div>
       
-      <eden-add type="bottom" onclick={ opts.onAddBlock } way="push" placement={ opts.placement + '.children' } if={ this.acl.validate('admin') && !opts.preview } />
+      <eden-add type="bottom" onclick={ opts.onAddField } way="push" placement={ opts.placement + '.children' } if={ this.acl.validate('admin') && !opts.preview } />
       <span class="eden-dropzone-label eden-dropzone-label-end" if={ this.acl.validate('admin') && !opts.preview }>
         Row #{ opts.placement } End
       </span>
@@ -25,37 +25,37 @@
         <label>
           Row Class
         </label>
-        <input class="form-control" ref="row" value={ opts.block.row || 'row' } onchange={ opts.onRowClass } />
+        <input class="form-control" ref="row" value={ opts.field.row || 'row' } onchange={ opts.onRowClass } />
       </div>
       <div class="form-group">
         <label>
           Center Vertically
         </label>
         <select class="form-control" ref="center" onchange={ opts.onCenterVertically }>
-          <option value="true" selected={ opts.block.centerVertically }>Yes</option>
-          <option value="false" selected={ !opts.block.centerVertically }>No</option>
+          <option value="true" selected={ opts.field.centerVertically }>Yes</option>
+          <option value="false" selected={ !opts.field.centerVertically }>No</option>
         </select>
       </div>
     </yield>
-  </block>
+  </field>
   
   <script>
     // do mixins
     this.mixin('acl');
     
     // set value
-    if (!opts.block.children) opts.block.children = [];
+    if (!opts.field.children) opts.field.children = [];
     
     /**
-     * get blocks
+     * get fields
      *
-     * @param  {Array} blocks
+     * @param  {Array} fields
      *
      * @return {Array}
      */
-    getBlocks (blocks) {
-      // return filtered blocks
-      return (blocks || []).filter((child) => child);
+    getFields (fields) {
+      // return filtered fields
+      return (fields || []).filter((child) => child);
     }
     
     /**
@@ -67,7 +67,7 @@
      */
     getElement (child) {
       // return get child
-      return (opts.getBlock(child) || {}).tag ? 'block-' + (opts.getBlock(child) || {}).tag : 'eden-loading';
+      return (opts.getField(child) || {}).tag ? 'field-' + (opts.getField(child) || {}).tag : 'eden-loading';
     }
 
     /**
@@ -81,10 +81,10 @@
       e.stopPropagation();
 
       // set class
-      opts.block.row = e.target.value.length ? e.target.value : null;
+      opts.field.row = e.target.value.length ? e.target.value : null;
 
       // run opts
-      if (opts.onSave) await opts.onSave(opts.block, opts.data, opts.placement);
+      if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement);
     }
     
     /**
@@ -100,11 +100,11 @@
       e.stopPropagation();
 
       // set class
-      opts.block.centerVertically = jQuery(e.target).val() === 'true';
+      opts.field.centerVertically = jQuery(e.target).val() === 'true';
 
       // run opts
-      if (opts.onSave) await opts.onSave(opts.block, opts.data, opts.placement);
+      if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement);
     }
     
   </script>
-</block-row>
+</field-row>

@@ -17,135 +17,18 @@
     // do mixins
     this.mixin('acl');
     this.mixin('model');
+    this.mixin('fields');
 
     // require uuid
     const uuid = require('uuid');
 
     // set update
-    this.form     = opts.form ? this.model('form', opts.form) : this.model('form', {});
+    this.form     = opts.form ? (opts.model ? this.parent.form : this.model('form', opts.form)) : this.model('form', {});
     this.type     = opts.type;
     this.fields   = (opts.form || {}).render || [];
     this.loading  = {};
     this.preview  = !!opts.preview;
     this.updating = false;
-
-    // set flattened fields
-    const fix = (field) => {
-      // standard children fields
-      let children = ['left', 'right', 'children'];
-
-      // return if moving
-      if (!field) return;
-
-      // check children
-      for (let child of children) {
-        // check child
-        if (field[child]) {
-          // remove empty fields
-          field[child] = Object.values(field[child]).filter((field) => field);
-
-          // push children to flat
-          field[child] = field[child].map(fix);
-        }
-      }
-
-      // return accum
-      return field;
-    };
-
-    // set flattened fields
-    const place = (field) => {
-      // standard children fields
-      let children = ['left', 'right', 'children'];
-
-      // return if moving
-      if (field.moving || field.removing) return;
-
-      // check children
-      for (let child of children) {
-        // check child
-        if (field[child]) {
-          // remove empty fields
-          field[child] = Object.values(field[child]);
-
-          // push children to flat
-          field[child] = field[child].map(place).filter((field) => field);
-        }
-      }
-
-      // return accum
-      return field;
-    };
-
-    // set flattened fields
-    const replace = (b) => {
-      // return field
-      return (field) => {
-        // standard children fields
-        let children = ['left', 'right', 'children'];
-
-        // return if moving
-        if (field.moving || field.removing) return;
-
-        // set field info for replace
-        if (field.uuid === b.uuid) {
-          // remove
-          for (let key in b) {
-            // set key
-            field[key] = b[key];
-          }
-        }
-
-        // check children
-        for (let child of children) {
-          // check child
-          if (field[child]) {
-            // remove empty fields
-            field[child] = Object.values(field[child]);
-
-            // push children to flat
-            field[child] = field[child].map(replace(b)).filter((field) => field);
-          }
-        }
-
-        // return accum
-        return field;
-      };
-    };
-
-    // set flattened fields
-    const flatten = (accum, field) => {
-      // standard children fields
-      let children = ['left', 'right', 'children'];
-
-      // get sanitised
-      let sanitised = JSON.parse(JSON.stringify(field));
-
-      // loop for of
-      for (let child of children) {
-        // delete child field
-        delete sanitised[child];
-        delete sanitised.saving;
-      }
-
-      // check field has children
-      accum.push(sanitised);
-
-      // check children
-      for (let child of children) {
-        // check child
-        if (field[child]) {
-          // remove empty fields
-          field[child] = field[child].filter((field) => field);
-
-          // push children to flat
-          accum.push(...field[child].reduce(flatten, []));
-        }
-      }
-
-      // return accum
-      return accum;
-    };
 
     /**
      * get field data
@@ -187,7 +70,7 @@
      */
     getFields () {
       // return filtered fields
-      return (this.form.get('positions') || []).map(fix).filter((field) => field);
+      return (this.form.get('positions') || []).map(this.filter.fix).filter((field) => field);
     }
 
     /**
@@ -203,7 +86,7 @@
 
       // way
       this.way      = target.attr('way');
-      this.fieldPos = target.attr('form');
+      this.fieldPos = target.attr('position');
 
       // open modal
       jQuery('.add-field-modal', this.root).modal('show');
@@ -252,13 +135,13 @@
 
       // set to fields
       if (!this.fields.find((b) => b.uuid === data.uuid)) this.fields.push(data);
-
+      
       // set flat
-      this.form.set('positions', (this.form.get('positions') || []).map(replace(fieldClone)));
-      this.form.set('fields', (this.form.get('positions') || []).reduce(flatten, []));
+      this.form.set('positions', (this.form.get('positions') || []).map(this.filter.replace(fieldClone)));
+      this.form.set('fields', (this.form.get('positions') || []).reduce(this.filter.flatten, []));
 
       // save form
-      await this.saveForm(this.form, true);
+      await this.saveForm();
 
       // check prevent update
       if (!preventUpdate) {
@@ -345,17 +228,17 @@
       let result = await res.json();
 
       // get positions
-      let positions = (this.form.get('positions') || []).map(fix).filter((field) => field);
+      let positions = (this.form.get('positions') || []).map(this.filter.fix).filter((field) => field);
 
       // set moving on field
       positions = dotProp.set(positions, form + '.removing', true);
 
       // get positions
-      this.form.set('positions', positions.map(place).filter((field) => field));
-      this.form.set('fields', (this.form.get('positions') || []).reduce(flatten, []));
+      this.form.set('positions', positions.map(this.filter.place).filter((field) => field));
+      this.form.set('fields', (this.form.get('positions') || []).reduce(this.filter.flatten, []));
 
       // save form
-      await this.saveForm(this.form);
+      await this.saveForm();
     }
 
     /**
@@ -394,10 +277,9 @@
       pos[this.way](field);
 
       // set flat
-      this.form.set('fields', (this.form.get('positions') || []).reduce(flatten, []));
+      this.form.set('fields', (this.form.get('positions') || []).reduce(this.filter.flatten, []));
 
       // save form
-      await this.saveForm(this.form);
       await this.onSaveField(field, {});
 
       // update view
@@ -407,12 +289,9 @@
     /**
      * saves form
      *
-     * @param {Object}  form
-     * @param {Boolean} preventRefresh
-     *
      * @return {Promise}
      */
-    async saveForm (form, preventRefresh) {
+    async saveForm () {
       // set loading
       this.loading.save = true;
 
@@ -420,11 +299,11 @@
       this.update();
 
       // check type
-      if (!form.type) form.set('type', opts.type);
+      if (!this.form.type) this.form.set('type', opts.type);
 
       // log data
-      let res = await fetch('/form/' + (form.get('id') ? form.get('id') + '/update' : 'create'), {
-        'body'    : JSON.stringify(form.get()),
+      let res = await fetch('/form/' + (this.form.get('id') ? this.form.get('id') + '/update' : 'create'), {
+        'body'    : JSON.stringify(this.form.get()),
         'method'  : 'post',
         'headers' : {
           'Content-Type' : 'application/json'
@@ -435,38 +314,29 @@
       // load data
       let data = await res.json();
 
-      // prevent clear
-      if (!preventRefresh) {
-        // reset positions
-        form.set('positions', []);
-
-        // update view
-        this.update();
-      }
-
-      // set in eden
-      window.eden.forms[form.get('id')] = data.result;
-
       // set logic
       for (let key in data.result) {
         // clone to form
-        form.set(key, data.result[key]);
+        this.form.set(key, data.result[key]);
 
         // set in opts
-        if (data.result[key]) opts.form[key] = data.result[key];
+        if (data.result[key] && !opts.model) opts.form[key] = data.result[key];
       }
+      
+      // set fields
+      this.fields = this.form.get('render') || [];
 
-      // set form
-      this.form = form;
+      // set in eden
+      window.eden.forms[this.form.get('id')] = data.result;
 
       // on save
-      if (opts.onSave) opts.onSave(form);
+      if (opts.onSave) opts.onSave(this.form);
 
       // set loading
       this.loading.save = false;
 
       // update view
-      this.update();
+      this.helper.update();
     }
 
     /**
@@ -479,6 +349,9 @@
     async loadFields (opts) {
       // set opts
       if (!opts) opts = {};
+
+      // return on loading fields
+      if (this.loading.fields) return;
 
       // require query string
       const qs = require('querystring');
@@ -493,7 +366,7 @@
       this.update();
 
       // log data
-      let res = await fetch('/form/' + this.form.get('id') + '/view' + (opts.length ? '?' + opts : ''), {
+      let res = await fetch((this.form.get('id') ? '/form/' + this.form.get('id') + '/view' : '/form/create') + (opts.length ? '?' + opts : ''), {
         'method'  : 'get',
         'headers' : {
           'Content-Type' : 'application/json'
@@ -509,26 +382,20 @@
         // set in eden
         window.eden.forms[this.form.get('id')] = data.result;
 
-        // set key
-        this.form.set('positions', []);
-
-        // udpate view
-        this.update();
-
         // set fields
         for (let key in data.result) {
           // set key
           this.form.set(key, data.result[key]);
         }
 
-        // set loading
-        this.loading.fields = false;
-
         // get fields
         this.fields = this.form.get('render') || [];
 
+        // set loading
+        this.loading.fields = false;
+
         // update view
-        this.update();
+        this.helper.update();
       }
     }
 
@@ -556,7 +423,7 @@
         let fields = [];
 
         // get positions
-        let positions = (this.form.get('positions') || []).map(fix).filter((field) => field);
+        let positions = (this.form.get('positions') || []).map(this.filter.fix).filter((field) => field);
 
         // set moving on field
         positions = dotProp.set(positions, form + '.moving', true);
@@ -607,7 +474,7 @@
         this.update();
 
         // save
-        this.saveForm(this.form);
+        this.saveForm();
       }).on('drag', (el, source) => {
         // add is dragging
         jQuery(this.refs.form).addClass('is-dragging');
@@ -639,13 +506,7 @@
       if (!this.eden.frontend) return;
 
       // check type
-      if ((opts.form || {}).id !== this.form.get('id') || opts.type !== this.type || !!opts.preview !== !!this.preview) {
-        // set fields
-        this.form.set('positions', []);
-
-        // set type
-        this.fields = (opts.form || {}).render || [];
-
+      if (this.helper.hasChange()) {
         // trigger mount
         this.trigger('mount');
       }
@@ -660,76 +521,37 @@
       // check frontend
       if (!this.eden.frontend) return;
 
+      // set form
+      this.form = opts.form ? (opts.model ? this.parent.form : this.model('form', opts.form)) : this.model('form', {});
+
       // init dragula
       if (!this.dragula && this.acl.validate('admin')) this.initDragula();
 
-      // set form
-      this.form = opts.form ? this.model('form', opts.form) : this.model('form', {});
-
-      // check default
+      // set default positions
       if (opts.positions && !(this.form.get('positions') || []).length && !this.form.get('id')) {
         // set default
         this.form.set('positions', opts.positions);
-        this.form.set('fields', (this.form.get('positions') || []).reduce(flatten, []));
+        this.form.set('fields', (this.form.get('positions') || []).reduce(this.filter.flatten, []));
 
         // save fields
-        this.saveForm(this.form);
+        this.saveForm();
       }
 
       // set positions
-      if (opts.type !== this.type || !!this.preview !== !!opts.preview) {
+      if (this.helper.hasChange()) {
         // set position
         this.type    = opts.type;
         this.preview = !!opts.preview;
 
-        // get positions
-        let positions = this.form.get('positions') || [];
-
-        // reset positions
-        this.form.set('positions', []);
-
-        // update
-        this.update();
-
-        // set positions again
-        this.form.set('positions', positions);
-
-        // update view again
-        this.update();
+        // force update
+        this.helper.update();
       }
 
       // check fields
-      if ((this.form.get('fields') || []).length !== this.fields.length) {
-        // load fields
-        this.loadFields();
-      } else if (!(this.form.get('fields') || []).length && !(this.eden.get('positions') || {})[this.form.get('id')]) {
+      if (this.helper.shouldLoad()) {
         // load fields
         this.loadFields();
       }
-
-      // loads field
-      socket.on('form.' + this.form.get('id') + '.field', (field) => {
-        // get found
-        let found = this.fields.find((b) => b.uuid === field.uuid);
-
-        // check found
-        if (!found) {
-          // push
-          this.fields.push(field);
-
-          // return update
-          return this.update();
-        }
-
-        // set values
-        for (let key in field) {
-          // set value
-          found[key] = field[key];
-        }
-
-        // update
-        this.update();
-      });
     });
   </script>
 </eden-fields>

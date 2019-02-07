@@ -12,7 +12,11 @@ class DateField {
 
     // bind methods
     this.submit = this.submit.bind(this);
-    this.sanitise = this.sanitise.bind(this);
+    this.render = this.render.bind(this);
+
+    // set meta
+    this.title = 'Date';
+    this.description = 'Date Field';
   }
 
   /**
@@ -40,7 +44,7 @@ class DateField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*}      value
@@ -53,7 +57,7 @@ class DateField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*} value

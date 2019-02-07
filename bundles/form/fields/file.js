@@ -15,7 +15,11 @@ class FileField {
 
     // bind methods
     this.submit = this.submit.bind(this);
-    this.sanitise = this.sanitise.bind(this);
+    this.render = this.render.bind(this);
+
+    // set meta
+    this.title = 'File';
+    this.description = 'File Field';
   }
 
   /**
@@ -50,7 +54,7 @@ class FileField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*}      value
@@ -73,13 +77,13 @@ class FileField {
       // check image
       if (!upload) return;
 
-      // sanitise
-      return await upload.sanitise();
+      // render
+      return await upload.render();
     }))).filter(val => val);
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*} value

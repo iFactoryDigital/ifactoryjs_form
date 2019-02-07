@@ -12,7 +12,11 @@ class CheckboxField {
 
     // bind methods
     this.submit = this.submit.bind(this);
-    this.sanitise = this.sanitise.bind(this);
+    this.render = this.render.bind(this);
+
+    // set meta
+    this.title = 'Checkbox';
+    this.description = 'Checkbox Field';
   }
 
   /**
@@ -28,7 +32,7 @@ class CheckboxField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*}      value
@@ -44,7 +48,7 @@ class CheckboxField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*} value

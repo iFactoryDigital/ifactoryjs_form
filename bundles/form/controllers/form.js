@@ -76,12 +76,38 @@ class FormController extends Controller {
       const fieldClassBuilt = new FieldClass(fieldHelper);
 
       // register
-      fieldHelper.register(field, {
+      fieldHelper.field(field, {
         for         : ['frontend', 'admin'],
         title       : fieldClassBuilt.title,
         categories  : fieldClassBuilt.categories,
         description : fieldClassBuilt.description
       }, fieldClassBuilt.render, fieldClassBuilt.save, fieldClassBuilt.submit);
+    });
+
+    // on render
+    this.eden.pre('view.compile', async (render) => {
+      // set Block
+      render.forms = {};
+
+      // move menus
+      if (render.state.forms) {
+        // await promise
+        await Promise.all(render.state.forms.map(async (type) => {
+        // get Block
+          const form = await Form.findOne({
+            type,
+          });
+
+          // set null or Block
+          render.placements[type] = form ? await form.sanitise(render.req) : null;
+        }));
+      }
+
+      // check blocks
+      if (!render.blocks) {
+        // render blocks
+        render.blocks = fieldHelper.renderFields('frontend');
+      }
     });
   }
 
@@ -136,7 +162,7 @@ class FormController extends Controller {
     });
 
     // check for website model
-    if (req.params.id) {
+    if (req.params.id && req.params.id !== 'null') {
       // load by id
       form = await Form.findById(req.params.id);
     }
@@ -164,14 +190,14 @@ class FormController extends Controller {
    * @layout   admin
    * @priority 12
    */
-  async saveBlockAction(req, res) {
+  async saveFieldAction(req, res) {
     // set website variable
     let form = new Form({
       creator : req.user,
     });
 
     // check for website model
-    if (req.params.id) {
+    if (req.params.id && req.params.id !== 'null') {
       // load by id
       form = await Form.findById(req.params.id);
     }
@@ -274,7 +300,7 @@ class FormController extends Controller {
     // return JSON
     res.json({
       state   : 'success',
-      result  : await form.sanitise(),
+      result  : await form.sanitise(req),
       message : 'Successfully updated form',
     });
   }

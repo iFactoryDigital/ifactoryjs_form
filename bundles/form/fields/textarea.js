@@ -12,7 +12,11 @@ class TextareaField {
 
     // bind methods
     this.submit = this.submit.bind(this);
-    this.sanitise = this.sanitise.bind(this);
+    this.render = this.render.bind(this);
+
+    // set meta
+    this.title = 'Textarea';
+    this.description = 'Textarea Field';
   }
 
   /**
@@ -28,7 +32,7 @@ class TextareaField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*}      value
@@ -41,7 +45,7 @@ class TextareaField {
   }
 
   /**
-   * sanitises form field
+   * renders form field
    *
    * @param {Object} data
    * @param {*} value

@@ -30,7 +30,7 @@ class Form extends Model {
       name   : this.get('name'),
       render : req ? (await Promise.all((this.get('fields') || []).map(async (field) => {
         // get from register
-        const registered = fieldHelper.blocks().find(b => b.type === field.type);
+        const registered = fieldHelper.fields().find(b => b.type === field.type);
 
         // check registered
         if (!registered) return null;
