@@ -40,33 +40,18 @@ class AddressField {
   /**
    * renders form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
    * @param {*}      value
    *
    * @return {*}
    */
-  async render({ child }, value) {
-    // run try/catch
-    try {
-      // return value
-      return typeof value === 'string' ? JSON.parse(value) : value;
-    } catch (e) {
-      // return old
-      return old;
-    }
-  }
+  async render(req, field, value) {
+    // set tag
+    field.tag = 'address';
 
-  /**
-   * renders form field
-   *
-   * @param {Object} data
-   * @param {*} value
-   *
-   * @return {*}
-   */
-  async column(data, value) {
-    // return value
-    return value && value.formatted ? value.formatted : '';
+    // return
+    return field;
   }
 }
 

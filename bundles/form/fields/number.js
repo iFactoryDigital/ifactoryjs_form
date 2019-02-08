@@ -34,27 +34,18 @@ class NumberField {
   /**
    * renders form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
    * @param {*}      value
    *
    * @return {*}
    */
-  async render({ child }, value) {
-    // return value
-    return parseInt(value) || 0;
-  }
+  async render(req, field, value) {
+    // set tag
+    field.tag = 'number';
 
-  /**
-   * renders form field
-   *
-   * @param {Object} data
-   * @param {*} value
-   *
-   * @return {*}
-   */
-  async column(data, value) {
-    // return value
-    return value ? parseInt(value) : 0;
+    // return
+    return field;
   }
 }
 

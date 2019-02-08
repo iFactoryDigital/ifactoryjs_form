@@ -1,18 +1,28 @@
-<form-submit-child-textarea>
-  <div class="form-group">
-    <div class="input-group">
-      <textarea name={ this.name () } id={ this.name (true) + '-input' } value={ (opts.child || {}).value || '' } required={ opts.child.required || false } class={ 'form-control' : true, 'form-control-active' : this.input (this.name ()) } rows="5"></textarea>
-      <label for={ this.name (true) + '-input' }>
-        { opts.child.name }
-      </label>
-      <div class="input-bar"></div>
-    </div>
-  </div>
-
+<field-textarea>
+  <field ref="field" is-input={ true } class="field-container-inner" on-container-class={ onFieldClass } value={ this.value } get-fields={ getFields } get-element={ getElement }>
+    <yield to="body">
+      <div class={ opts.field.group || 'form-group' }>
+        <label for={ opts.field.uuid }>
+          { opts.field.label }
+          <i if={ !opts.field.label }>Set Label</i>
+        </label>
+        <textarea name={ opts.field.uuid } required={ opts.field.required } class="{ opts.field.field || 'form-control' }{ 'form-control-active' : false }" id={ opts.field.uuid }>{ opts.value }</textarea>
+      </div>
+    </yield>
+  </field>
+  
   <script>
-    // add mixins
-    this.mixin ('child');
-    this.mixin ('input');
+    // do mixins
+    this.mixin('acl');
 
+    /**
+     * on mount function
+     *
+     * @param {Event} 'mount'
+     */
+    this.on('mount', () => {
+      
+    });
+    
   </script>
-</form-submit-child-textarea>
+</field-textarea>

@@ -1,18 +1,28 @@
-<form-submit-child-number>
-  <div class="form-group">
-    <div class="input-group">
-      <input type="number" name={ this.name () } id={ this.name (true) + '-input' } required={ opts.child.required || false } class={ 'form-control' : true, 'form-control-active' : this.input (this.name ()) } value={ opts.child.value || '' }>
-      <label for={ this.name (true) + '-input' }>
-        { opts.child.name }
-      </label>
-      <div class="input-bar"></div>
-    </div>
-  </div>
-
+<field-number>
+  <field ref="field" is-input={ true } class="field-container-inner" on-container-class={ onFieldClass } value={ this.value } get-fields={ getFields } get-element={ getElement }>
+    <yield to="body">
+      <div class={ opts.field.group || 'form-group' }>
+        <label for={ opts.field.uuid }>
+          { opts.field.label }
+          <i if={ !opts.field.label }>Set Label</i>
+        </label>
+        <input type="number" name={ opts.field.uuid } required={ opts.field.required } class="{ opts.field.field || 'form-control' }{ 'form-control-active' : false }" id={ opts.field.uuid } value={ opts.value } />
+      </div>
+    </yield>
+  </field>
+  
   <script>
-    // add mixins
-    this.mixin ('child');
-    this.mixin ('input');
+    // do mixins
+    this.mixin('acl');
 
+    /**
+     * on mount function
+     *
+     * @param {Event} 'mount'
+     */
+    this.on('mount', () => {
+      
+    });
+    
   </script>
-</form-submit-child-number>
+</field-number>

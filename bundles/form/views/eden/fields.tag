@@ -1,7 +1,7 @@
 <eden-fields>
   <div ref="form" class="eden-fields eden-blocks">
 
-    <div class="{ 'eden-dropzone' : this.acl.validate('admin') && !opts.preview } { 'empty' : !getFields().length }" ref="form" data-form="" if={ !this.updating }>
+    <div class="{ 'eden-dropzone' : this.acl.validate('admin') && !opts.preview } { 'empty' : !getFields().length }" ref="form" data-placement="" if={ !this.updating }>
       <span class="eden-dropzone-label" if={ this.acl.validate('admin') && !opts.preview }>
         { this.form.get('title') }
       </span>
@@ -86,7 +86,7 @@
 
       // way
       this.way      = target.attr('way');
-      this.fieldPos = target.attr('position');
+      this.fieldPos = target.attr('placement');
 
       // open modal
       jQuery('.add-field-modal', this.root).modal('show');
@@ -141,7 +141,7 @@
       this.form.set('fields', (this.form.get('positions') || []).reduce(this.filter.flatten, []));
 
       // save form
-      await this.saveForm();
+      await this.saveForm(preventUpdate);
 
       // check prevent update
       if (!preventUpdate) {
@@ -291,7 +291,7 @@
      *
      * @return {Promise}
      */
-    async saveForm () {
+    async saveForm (preventRefresh) {
       // set loading
       this.loading.save = true;
 
@@ -336,7 +336,11 @@
       this.loading.save = false;
 
       // update view
-      this.helper.update();
+      if (!preventRefresh) {
+        this.helper.update();
+      } else {
+        this.update()
+      }
     }
 
     /**
@@ -414,7 +418,7 @@
         }
       }).on('drop', (el, target, source, sibling) => {
         // get current form
-        let form = jQuery(el).attr('form');
+        let placement = jQuery(el).attr('placement');
 
         // check target
         if (!target || !source || !el) return;
@@ -424,21 +428,23 @@
 
         // get positions
         let positions = (this.form.get('positions') || []).map(this.filter.fix).filter((field) => field);
+        
+        console.log(positions, fields, placement);
 
         // set moving on field
-        positions = dotProp.set(positions, form + '.moving', true);
+        positions = dotProp.set(positions, placement + '.moving', true);
 
         // loop physical fields
         jQuery('> [data-field]', target).each((i, field) => {
           // set get from
-          let getFrom = jQuery(field).attr('form');
+          let getFrom = jQuery(field).attr('placement');
           let gotField = dotProp.get(positions, getFrom);
 
           // return on no field
           if (!gotField) return;
 
           // clone field
-          if (getFrom === form) {
+          if (getFrom === placement) {
             // clone field
             gotField = JSON.parse(JSON.stringify(gotField));
 
@@ -455,16 +461,16 @@
         this.update();
 
         // set form
-        if (jQuery(target).attr('data-form').length) {
+        if (jQuery(target).attr('data-placement').length) {
           // set positions
-          positions = dotProp.set(positions, jQuery(target).attr('data-form'), fields);
+          positions = dotProp.set(positions, jQuery(target).attr('data-placement'), fields);
         } else {
           // set positions
           positions = fields;
         }
 
         // get positions
-        positions = (positions || []).map(place).filter((field) => field);
+        positions = (positions || []).map(this.filter.place).filter((field) => field);
 
         // update form
         this.form.set('positions', positions);

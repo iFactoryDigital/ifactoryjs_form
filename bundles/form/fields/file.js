@@ -56,43 +56,18 @@ class FileField {
   /**
    * renders form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
    * @param {*}      value
    *
    * @return {*}
    */
-  async render({ child }, value) {
-    // set multiple
-    child.multiple = false;
+  async render(req, field, value) {
+    // set tag
+    field.tag = 'file';
 
-    // check array
-    if (!value) value = [];
-    if (!Array.isArray(value)) value = [value];
-
-    // return mapped value
-    return (await Promise.all((value || []).filter(val => val).map(async (val) => {
-      // find image
-      const upload = await File.findById(val);
-
-      // check image
-      if (!upload) return;
-
-      // render
-      return await upload.render();
-    }))).filter(val => val);
-  }
-
-  /**
-   * renders form field
-   *
-   * @param {Object} data
-   * @param {*} value
-   *
-   * @return {*}
-   */
-  async column(data, value) {
-    // return value
-    return value || '';
+    // return
+    return field;
   }
 }
 

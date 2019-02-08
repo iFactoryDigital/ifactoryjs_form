@@ -38,78 +38,18 @@ class UserField {
   /**
    * renders form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
    * @param {*}      value
    *
    * @return {*}
    */
-  async render({ child }, value) {
-    // unset multiple
-    child.multiple = false;
+  async render(req, field, value) {
+    // set tag
+    field.tag = 'user';
 
-    // check if array
-    if (!Array.isArray(value)) value = [value];
-
-    // loop
-    const values = await Promise.all(value.map(async (val) => {
-      // if no value
-      if (!val || val.length !== 24) return null;
-
-      // find by id
-      const user = val ? await User.findById(val) : null;
-
-      // check user
-      if (!user) return null;
-
-      // add to result
-      return {
-        id       : user.get('_id').toString(),
-        text     : (user.name() ? `${user.name()} - ` : '') + (user.get('email') || user.get('username')),
-        selected : true,
-      };
-    }));
-
-    // return values
-    return values;
-  }
-
-  /**
-   * renders form field
-   *
-   * @param {Object} data
-   * @param {*} value
-   *
-   * @return {*}
-   */
-  async column(data, value) {
-    // get value
-    if (value && !Array.isArray(value)) value = [value];
-
-    // map for values
-    let values = (await Promise.all((value || []).map((val) => {
-      // check value
-      if (!val || val.length !== 24) return false;
-
-      // find user
-      return val ? User.findById(val) : false;
-    })));
-
-    // check values
-    if (values && values.length) {
-      values = values.reduce((user) => {
-      // return user
-        return user;
-      });
-    }
-
-    // check value
-    if (values && !Array.isArray(values)) values = [values];
-
-    // return String
-    return values && values.length ? values.map((user) => {
-      // return name
-      return user.name() || user.get('username');
-    }).join(', ') : false;
+    // return
+    return field;
   }
 }
 

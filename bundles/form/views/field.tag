@@ -47,9 +47,27 @@
         <div class="modal-body">
           <div class="form-group">
             <label>
-              Field Class
+              Field Main Class
             </label>
             <input class="form-control" ref="class" value={ opts.field.class } onchange={ onClass } />
+          </div>
+          <div class="form-group" if={ opts.isInput }>
+            <label>
+              Field Group Class
+            </label>
+            <input class="form-control" ref="group" value={ opts.field.group || 'form-group' } onchange={ onGroupClass } />
+          </div>
+          <div class="form-group" if={ opts.isInput }>
+            <label>
+              Field Field Class
+            </label>
+            <input class="form-control" ref="field" value={ opts.field.field || 'form-control' } onchange={ onFieldClass } />
+          </div>
+          <div class="form-group" if={ opts.isInput }>
+            <label>
+              Field Label
+            </label>
+            <input class="form-control" ref="label" value={ opts.field.label } onchange={ onLabel } />
           </div>
           <yield from="modal" />
         </div>
@@ -142,6 +160,57 @@
 
       // set class
       opts.field.class = e.target.value.length ? e.target.value : null;
+
+      // run opts
+      if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement);
+    }
+
+    /**
+     * on class
+
+     * @param  {Event} e
+     */
+    async onGroupClass (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set class
+      opts.field.group = e.target.value.length ? e.target.value : null;
+
+      // run opts
+      if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement);
+    }
+
+    /**
+     * on class
+
+     * @param  {Event} e
+     */
+    async onFieldClass (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set class
+      opts.field.field = e.target.value.length ? e.target.value : null;
+
+      // run opts
+      if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement);
+    }
+
+    /**
+     * on class
+
+     * @param  {Event} e
+     */
+    async onLabel (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set class
+      opts.field.label = e.target.value.length ? e.target.value : null;
 
       // run opts
       if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement);

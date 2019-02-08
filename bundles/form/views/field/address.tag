@@ -1,47 +1,47 @@
-<form-submit-child-address>
-  <div class="form-group">
-    <div class="input-group">
-      <input type="hidden" name={ this.name () + '[address]' } value={ JSON.stringify (this.value) } />
-      <input type="text" name={ this.name () + '[geo]' } required={ opts.child.required } class={ 'form-control' : true, 'form-control-active' : this.input (this.name () + '[geo]') } id={ this.name (true) + '[geo]' } value={ (opts.child.value || {}).formatted || '' }>
-      <label for={ this.name (true) + '-geo' }>
-        { this.label }
-      </label>
-      <div class="input-bar"></div>
-    </div>
-  </div>
-
+<field-address>
+  <field ref="field" is-input={ true } class="field-container-inner" value={ this.value } get-fields={ getFields } get-element={ getElement }>
+    <yield to="body">
+      <div class={ opts.field.group || 'form-group' }>
+        <label for={ opts.field.uuid + '-geo' }>
+          { opts.field.label }
+          <i if={ !opts.field.label }>Set Label</i>
+        </label>
+        <input type="hidden" name={ opts.field.uuid + '[address]' } value={ JSON.stringify(opts.value) } />
+        <input type="text" name={ opts.field.uuid + '[geo]' } required={ opts.field.required } class="{ opts.field.field || 'form-control' }{ 'form-control-active' : false }" id={ opts.field.uuid + '-geo' } value={ (opts.value || {}).formatted || '' }>
+      </div>
+    </yield>
+  </field>
+  
   <script>
-    // use mixins
-    this.mixin ('child');
-    this.mixin ('input');
-
-    // set address
-    this.label = opts.child.name;
-    this.value = opts.child.value || {};
+    // do mixins
+    this.mixin('acl');
+    
+    // set initial value
+    this.value = opts.value;
 
     /**
      * renders location input
      */
-    _location () {
+    initialize () {
       // let input
-      let input = jQuery ('input[type="text"]', this.root);
-      let index = input.attr ('data-index');
+      let input = jQuery('input[type="text"]', this.root);
+      let index = input.attr('data-index');
 
       // build geocomplete
-      input.geocomplete ().on ('geocode:result', (e, result) => {
+      input.geocomplete().on('geocode:result', (e, result) => {
         // set values
         this.value = {
           'id'         : result.id,
           'geo'        : {
-            'lat' : result.geometry.location.lat (),
-            'lng' : result.geometry.location.lng ()
+            'lat' : result.geometry.location.lat(),
+            'lng' : result.geometry.location.lng()
           },
           'formatted'  : result.formatted_address,
           'components' : result.address_components
         };
 
         // update view
-        this.update ();
+        this.update();
       });
     }
 
@@ -50,12 +50,13 @@
      *
      * @param {Event} 'mount'
      */
-    this.on ('mount', () => {
+    this.on('mount', () => {
       // check jQuery
       if (typeof jQuery !== 'undefined') {
         // render location
-        this._location ();
+        this.initialize();
       }
     });
+    
   </script>
-</form-submit-child-address>
+</field-address>

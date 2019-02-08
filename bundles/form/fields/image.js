@@ -55,39 +55,18 @@ class ImageField {
   /**
    * renders form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
    * @param {*}      value
    *
    * @return {*}
    */
-  async render({ child }, value) {
-    // set multiple
-    child.multiple = false;
+  async render(req, field, value) {
+    // set tag
+    field.tag = 'image';
 
-    // return mapped value
-    return (await Promise.all((value || []).filter(val => val).map(async (val) => {
-      // find image
-      const image = await Image.findById(val);
-
-      // check image
-      if (!image) return;
-
-      // render
-      return await image.render();
-    }))).filter(val => val);
-  }
-
-  /**
-   * renders form field
-   *
-   * @param {Object} data
-   * @param {*} value
-   *
-   * @return {*}
-   */
-  async column(data, value) {
-    // return value
-    return '';
+    // return
+    return field;
   }
 }
 

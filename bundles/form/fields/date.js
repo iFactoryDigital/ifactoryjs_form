@@ -46,31 +46,18 @@ class DateField {
   /**
    * renders form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
    * @param {*}      value
    *
    * @return {*}
    */
-  async render({ child }, value) {
-    // return value
-    return value;
-  }
+  async render(req, field, value) {
+    // set tag
+    field.tag = 'date';
 
-  /**
-   * renders form field
-   *
-   * @param {Object} data
-   * @param {*} value
-   *
-   * @return {*}
-   */
-  async column(data, value) {
-    // return value
-    return value && value.toLocaleTimeString ? value.toLocaleTimeString('en-GB', {
-      day   : 'numeric',
-      year  : 'numeric',
-      month : 'short',
-    }) : false;
+    // return
+    return field;
   }
 }
 

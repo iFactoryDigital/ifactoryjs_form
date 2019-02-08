@@ -34,27 +34,18 @@ class TextareaField {
   /**
    * renders form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
    * @param {*}      value
    *
    * @return {*}
    */
-  async render({ child }, value) {
-    // return value
-    return value;
-  }
+  async render(req, field, value) {
+    // set tag
+    field.tag = 'textarea';
 
-  /**
-   * renders form field
-   *
-   * @param {Object} data
-   * @param {*} value
-   *
-   * @return {*}
-   */
-  async column(data, value) {
-    // return value
-    return value || '';
+    // return
+    return field;
   }
 }
 
