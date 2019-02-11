@@ -322,9 +322,6 @@
         // set in opts
         if (data.result[key] && !opts.model) opts.form[key] = data.result[key];
       }
-      
-      // set fields
-      this.fields = this.form.get('render') || [];
 
       // set in eden
       window.eden.forms[this.form.get('id')] = data.result;
@@ -391,9 +388,6 @@
           // set key
           this.form.set(key, data.result[key]);
         }
-
-        // get fields
-        this.fields = this.form.get('render') || [];
 
         // set loading
         this.loading.fields = false;
@@ -529,7 +523,6 @@
 
       // set form
       this.form = opts.form ? (opts.model ? this.parent.form : this.model('form', opts.form)) : this.model('form', {});
-      this.fields = this.form.get('fields') || [];
 
       // init dragula
       if (!this.dragula && this.acl.validate('admin')) this.initDragula();
