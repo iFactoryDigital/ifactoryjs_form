@@ -25,14 +25,22 @@ class UserField {
   /**
    * renders form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
    * @param {*}      value
+   * @param {*}      old
    *
    * @return {*}
    */
-  async submit({ child, value }) {
+  async submit(req, field, value, old) {
     // return value
-    return value;
+    try {
+      // return user
+      return await User.findById(value);
+    } catch (e) {
+      // return old value
+      return old;
+    }
   }
 
   /**
@@ -47,6 +55,7 @@ class UserField {
   async render(req, field, value) {
     // set tag
     field.tag = 'user';
+    field.value = value ? (Array.isArray(value) ? await Promise.all(value.map(item => item.sanitise())) : await value.sanitise()) : null;
 
     // return
     return field;

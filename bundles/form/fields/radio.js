@@ -12,7 +12,6 @@ class RadioField {
 
     // bind methods
     this.submit = this.submit.bind(this);
-    this.update = this.update.bind(this);
     this.render = this.render.bind(this);
 
     // set meta
@@ -23,33 +22,16 @@ class RadioField {
   /**
    * submits form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
+   * @param {*}      value
+   * @param {*}      old
    *
    * @return {*}
    */
-  submit({ child, value }) {
+  submit(req, field, value, old) {
     // return value
     return value;
-  }
-
-  /**
-   * updates field
-   *
-   * @param {field} Field
-   * @param {Object} data
-   * @param {Object} options
-   *
-   * @return {*}
-   */
-  async update(field, data) {
-    // set data
-    for (const key in data) {
-      // check if id
-      if (key === 'id') continue;
-
-      // set value
-      field.set(key, data[key]);
-    }
   }
 
   /**
@@ -64,6 +46,7 @@ class RadioField {
   async render(req, field, value) {
     // set tag
     field.tag = 'radio';
+    field.value = value;
 
     // return
     return field;

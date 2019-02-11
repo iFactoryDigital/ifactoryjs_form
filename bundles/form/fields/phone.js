@@ -1,10 +1,10 @@
 
 /**
- * build number helper
+ * build text helper
  */
-class NumberField {
+class PhoneField {
   /**
-   * construct number helper
+   * construct text helper
    */
   constructor(helper) {
     // set helper
@@ -15,8 +15,8 @@ class NumberField {
     this.render = this.render.bind(this);
 
     // set meta
-    this.title = 'Number';
-    this.description = 'Number Field';
+    this.title = 'Phone';
+    this.description = 'Phone Field';
   }
 
   /**
@@ -45,7 +45,7 @@ class NumberField {
    */
   async render(req, field, value) {
     // set tag
-    field.tag = 'number';
+    field.tag = 'phone';
     field.value = value;
 
     // return
@@ -54,8 +54,8 @@ class NumberField {
 }
 
 /**
- * export built number helper
+ * export built text helper
  *
- * @type {number}
+ * @type {text}
  */
-module.exports = NumberField;
+module.exports = PhoneField;

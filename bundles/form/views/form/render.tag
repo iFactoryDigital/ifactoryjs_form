@@ -1,7 +1,7 @@
 <form-render>
-  <div class="form-render form-{ opts.form.split('.').join('-') }">
-    <div class="form-render-fields" data-form={ opts.form } ref="fields" data-is="eden-fields" fields={ this.getFields() } form={ getForm() } on-save={ onSave } id={ opts.form } />
-  </div>
+  <form ref="form" method={ opts.method || 'post' } action={ opts.action || '/form/submit' } class="form-render form-{ opts.placement.split('.').join('-') }">
+    <div class="form-render-fields" data-form={ opts.placement } ref="fields" data-is="eden-fields" fields={ this.getFields() } preview={ opts.preview } form={ getForm() } on-save={ onSave } id={ opts.placement } positions={ opts.positions } />
+  </form>
 
   <script>
     // mixin acl
@@ -21,7 +21,7 @@
       let forms = this.eden.get('forms') || {};
 
       // set form
-      forms[opts.form] = form.get();
+      forms[opts.placement] = form.get();
 
       // set forms
       this.eden.set('forms', forms);
@@ -71,9 +71,19 @@
      */
     getForm () {
       // return form
-      return (this.eden.get('forms') || {})[opts.form] ? this.eden.get('forms')[opts.form] : {
-        'id' : opts.form
-      };
+      return opts.form || ((this.eden.get('forms') || {})[opts.placement] ? this.eden.get('forms')[opts.placement] : {
+        'placement' : opts.placement
+      });
+    }
+    
+    /**
+     * submit form
+     *
+     * @return {*}
+     */
+    submit () {
+      // submit form
+      return jQuery(this.refs.form).submit();
     }
 
   </script>

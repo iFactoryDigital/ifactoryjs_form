@@ -17,7 +17,7 @@
     this.mixin('acl');
     
     // set initial value
-    this.value = opts.value;
+    this.value = opts.data.value;
 
     /**
      * renders location input

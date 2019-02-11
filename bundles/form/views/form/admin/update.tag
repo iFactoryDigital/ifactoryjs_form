@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div class="cms-placement-fields" data-placement={ (opts.item || {}).id || 'form' } data-is="eden-fields" model={ true } form={ true } for="frontend" fields={ opts.fields } on-save={ onForm } type={ (opts.item || {}).id || 'form' } />
+    <div class="cms-placement-fields" data-form={ (opts.item || {}).id || 'form' } data-is="eden-fields" model={ true } form={ true } for="frontend" fields={ opts.fields } on-save={ onForm } type={ (opts.item || {}).id || 'form' } />
 
   </div>
 

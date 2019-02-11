@@ -25,11 +25,14 @@ class ImageField {
   /**
    * submits form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
+   * @param {*}      value
+   * @param {*}      old
    *
    * @return {*}
    */
-  async submit({ child, value, old }) {
+  async submit(req, field, value, old) {
     // check value
     if (!Array.isArray(value)) value = [value];
 
@@ -41,7 +44,7 @@ class ImageField {
         const image = await Image.findById(val);
 
         // check image
-        if (image) return image.get('_id').toString();
+        if (image) return image;
 
         // return null
         return null;
@@ -64,6 +67,7 @@ class ImageField {
   async render(req, field, value) {
     // set tag
     field.tag = 'image';
+    field.value = value ? (Array.isArray(value) ? await Promise.all(value.map(item => item.sanitise())) : await value.sanitise()) : null;
 
     // return
     return field;

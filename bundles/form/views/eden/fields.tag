@@ -529,6 +529,7 @@
 
       // set form
       this.form = opts.form ? (opts.model ? this.parent.form : this.model('form', opts.form)) : this.model('form', {});
+      this.fields = this.form.get('fields') || [];
 
       // init dragula
       if (!this.dragula && this.acl.validate('admin')) this.initDragula();

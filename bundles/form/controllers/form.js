@@ -7,6 +7,7 @@ const Controller = require('controller');
 const Form = model('form');
 
 // load helper
+const formHelper  = helper('form');
 const fieldHelper = helper('form/field');
 const modelHelper = helper('model');
 
@@ -68,7 +69,7 @@ class FormController extends Controller {
     }, async (req, field) => { }, async (req, field) => { });
 
     // register default field types
-    ['address', 'checkbox', 'date', 'file', 'image', 'number', 'radio', 'select', 'text', 'textarea', 'user'].forEach((field) => {
+    ['address', 'checkbox', 'date', 'file', 'email', 'image', 'phone', 'number', 'radio', 'select', 'text', 'textarea', 'user'].forEach((field) => {
       // require field
       const FieldClass = require(`form/fields/${field}`);
 
@@ -80,9 +81,12 @@ class FormController extends Controller {
         for         : ['frontend', 'admin'],
         title       : fieldClassBuilt.title,
         categories  : fieldClassBuilt.categories,
-        description : fieldClassBuilt.description
+        description : fieldClassBuilt.description,
       }, fieldClassBuilt.render, fieldClassBuilt.save, fieldClassBuilt.submit);
     });
+
+    // add middleware
+    this.eden.router.use(this._middleware);
 
     // on render
     this.eden.pre('view.compile', async (render) => {
@@ -92,21 +96,19 @@ class FormController extends Controller {
       // move menus
       if (render.state.forms) {
         // await promise
-        await Promise.all(render.state.forms.map(async (type) => {
+        await Promise.all(render.state.forms.map(async (placement) => {
         // get Block
-          const form = await Form.findOne({
-            type,
-          });
+          const form = await formHelper.get(placement);
 
           // set null or Block
-          render.placements[type] = form ? await form.sanitise(render.req) : null;
+          render.forms[placement] = form ? await formHelper.render(render.req, form) : null;
         }));
       }
 
-      // check blocks
-      if (!render.blocks) {
-        // render blocks
-        render.blocks = fieldHelper.renderFields('frontend');
+      // check fields
+      if (!render.fields) {
+        // render fields
+        render.fields = fieldHelper.renderFields('frontend');
       }
     });
   }
@@ -157,21 +159,33 @@ class FormController extends Controller {
    */
   async viewAction(req, res) {
     // set website variable
-    let form = new Form({
-      creator : req.user,
-    });
+    let form = null;
 
     // check for website model
     if (req.params.id && req.params.id !== 'null') {
-      // load by id
-      form = await Form.findById(req.params.id);
+      // add try/catch
+      try {
+        // load by id
+        form = await Form.findById(req.params.id);
+      } catch (e) {}
+
+      // add try/catch
+      try {
+        // load by id
+        if (!form) {
+          // set form by placement
+          form = await Form.findOne({
+            placement : req.params.id,
+          });
+        }
+      } catch (e) {}
     }
 
     // check placement
     if (!form) {
-      // fail state
-      return res.json({
-        state : 'fail',
+      // set new form
+      form = new Form({
+        creator : req.user,
       });
     }
 
@@ -289,6 +303,7 @@ class FormController extends Controller {
     // update placement
     form.set('name', req.body.name);
     form.set('fields', req.body.fields);
+    form.set('placement', req.body.placement);
     form.set('positions', req.body.positions);
 
     // save placement
@@ -303,6 +318,33 @@ class FormController extends Controller {
       result  : await form.sanitise(req),
       message : 'Successfully updated form',
     });
+  }
+
+  /**
+   * middleware for Block
+   *
+   * @param  {Request}   req
+   * @param  {Response}  res
+   * @param  {Function}  next
+   */
+  _middleware(req, res, next) {
+    // set Block
+    res.locals.forms = [];
+
+    // create Block method
+    res.form = req.form = (form) => {
+      // check locals
+      if (!Array.isArray(res.locals.forms)) res.locals.forms = [];
+
+      // push placement to Block
+      if (res.locals.forms.includes(form)) return;
+
+      // add to Block
+      res.locals.forms.push(form);
+    };
+
+    // run next
+    return next();
   }
 }
 

@@ -25,11 +25,14 @@ class FileField {
   /**
    * submits form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
+   * @param {*}      value
+   * @param {*}      old
    *
    * @return {*}
    */
-  async submit({ child, value, old }) {
+  async submit(req, field, value, old) {
     // check array
     if (!value) value = [];
     if (!Array.isArray(value)) value = [value];
@@ -42,7 +45,7 @@ class FileField {
         const upload = await File.findById(val);
 
         // check image
-        if (upload) return upload.get('_id').toString();
+        if (upload) return upload;
 
         // return null
         return null;
@@ -65,6 +68,7 @@ class FileField {
   async render(req, field, value) {
     // set tag
     field.tag = 'file';
+    field.value = value ? (Array.isArray(value) ? await Promise.all(value.map(item => item.sanitise())) : await value.sanitise()) : null;
 
     // return
     return field;

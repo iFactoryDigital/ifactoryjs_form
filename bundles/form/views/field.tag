@@ -51,6 +51,15 @@
             </label>
             <input class="form-control" ref="class" value={ opts.field.class } onchange={ onClass } />
           </div>
+          <div class="form-group" if={ opts.isMultiple }>
+            <label>
+              Allow Multiple Values
+            </label>
+            <select class="form-control" onchange={ onAllowMultiple }>
+              <option value="true" selected={ opts.field.Multiple }>Yes</option>
+              <option value="false" selected={ !opts.field.Multiple }>No</option>
+            </select>
+          </div>
           <div class="form-group" if={ opts.isInput }>
             <label>
               Field Group Class
@@ -194,6 +203,25 @@
 
       // set class
       opts.field.field = e.target.value.length ? e.target.value : null;
+
+      // run opts
+      if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement);
+    }
+    
+    /**
+     * on allow multiple
+     *
+     * @param  {Event}  e
+     *
+     * @return {Promise}
+     */
+    async onAllowMultiple (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set class
+      opts.field.multiple = jQuery(e.target).val() === 'true';
 
       // run opts
       if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement);

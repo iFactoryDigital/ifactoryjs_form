@@ -22,11 +22,14 @@ class SelectField {
   /**
    * submits form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
+   * @param {*}      value
+   * @param {*}      old
    *
    * @return {*}
    */
-  submit({ child, value }) {
+  submit(req, field, value, old) {
     // return value
     return value;
   }
@@ -43,6 +46,7 @@ class SelectField {
   async render(req, field, value) {
     // set tag
     field.tag = 'select';
+    field.value = value;
 
     // return
     return field;

@@ -15,16 +15,16 @@
 
   <script>
     // do mixins
-    this.mixin ('child');
-    this.mixin ('input');
+    this.mixin('child');
+    this.mixin('input');
 
     // set date
     try {
-      this.date = new Date (opts.child.value || new Date ());
+      this.date = new Date(opts.data.value || new Date());
     } catch (e) {}
 
     // set date
-    if (!this.date || isNaN (this.date)) this.date = new Date ();
+    if (!this.date || isNaN(this.date)) this.date = new Date();
 
     /**
      * on change function

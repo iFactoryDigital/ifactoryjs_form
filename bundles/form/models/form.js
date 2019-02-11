@@ -22,11 +22,10 @@ class Form extends Model {
    *
    * @return {Promise}
    */
-  async sanitise(req) {
+  async sanitise(req, current = []) {
     // return placement
     return {
       id     : this.get('_id') ? this.get('_id').toString() : null,
-      type   : this.get('type'),
       name   : this.get('name'),
       render : req ? (await Promise.all((this.get('fields') || []).map(async (field) => {
         // get from register
@@ -36,7 +35,10 @@ class Form extends Model {
         if (!registered) return null;
 
         // get data
-        const data = await registered.render(req, field);
+        const data = await registered.render(req, field, (current.find((c) => {
+          // return found field
+          return c.uuid === field.uuid;
+        }) || {}).value);
 
         // set uuid
         data.uuid = field.uuid;
@@ -45,6 +47,7 @@ class Form extends Model {
         return data;
       }))).filter(b => b) : null,
       fields    : this.get('fields') || [],
+      placement : this.get('placement'),
       positions : this.get('positions') || [],
     };
   }

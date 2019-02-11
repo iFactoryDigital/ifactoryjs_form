@@ -22,11 +22,14 @@ class AddressField {
   /**
    * submits form field
    *
-   * @param {Object} data
+   * @param {req}    Request
+   * @param {Object} field
+   * @param {*}      value
+   * @param {*}      old
    *
    * @return {*}
    */
-  submit({ child, value, old }) {
+  submit(req, field, value, old) {
     // run try/catch
     try {
       // return value
@@ -49,6 +52,7 @@ class AddressField {
   async render(req, field, value) {
     // set tag
     field.tag = 'address';
+    field.value = value;
 
     // return
     return field;

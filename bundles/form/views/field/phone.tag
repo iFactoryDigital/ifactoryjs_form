@@ -1,4 +1,4 @@
-<field-text>
+<field-phone>
   <field ref="field" is-input={ true } class="field-container-inner" on-container-class={ onFieldClass } get-fields={ getFields } get-element={ getElement }>
     <yield to="body">
       <div class={ opts.field.group || 'form-group' }>
@@ -6,7 +6,7 @@
           { opts.field.label }
           <i if={ !opts.field.label }>Set Label</i>
         </label>
-        <input type="text" name={ opts.field.uuid } required={ opts.field.required } class="{ opts.field.field || 'form-control' }{ 'form-control-active' : false }" id={ opts.field.uuid } value={ opts.data.value }>
+        <input type="tel" name={ opts.field.uuid } required={ opts.field.required } class="{ opts.field.field || 'form-control' }{ 'form-control-active' : false }" id={ opts.field.uuid } value={ opts.data.value }>
       </div>
     </yield>
   </field>
@@ -25,4 +25,4 @@
     });
     
   </script>
-</field-text>
+</field-phone>
