@@ -322,6 +322,12 @@
         // set in opts
         if (data.result[key] && !opts.model) opts.form[key] = data.result[key];
       }
+      
+      // set fields
+      const missing = (this.form.get('render') || []).filter((field) => !this.fields.find((f) => f.uuid === field.uuid));
+      
+      // push missing fields
+      this.fields.push(...missing);
 
       // set in eden
       window.eden.forms[this.form.get('id')] = data.result;
@@ -388,6 +394,12 @@
           // set key
           this.form.set(key, data.result[key]);
         }
+        
+        // set fields
+        const missing = (this.form.get('render') || []).filter((field) => !this.fields.find((f) => f.uuid === field.uuid));
+        
+        // push missing fields
+        this.fields.push(...missing);
 
         // set loading
         this.loading.fields = false;
@@ -422,8 +434,6 @@
 
         // get positions
         let positions = (this.form.get('positions') || []).map(this.filter.fix).filter((field) => field);
-        
-        console.log(positions, fields, placement);
 
         // set moving on field
         positions = dotProp.set(positions, placement + '.moving', true);

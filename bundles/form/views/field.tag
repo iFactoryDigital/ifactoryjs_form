@@ -18,7 +18,7 @@
               <button class="btn btn-sm btn-secondary" onclick={ onUpdateModal }>
                 <i class="fa fa-pencil" />
               </button>
-              <button class="btn btn-sm btn-secondary" onclick={ onRemoveModal }>
+              <button class="btn btn-sm btn-secondary" onclick={ onRemoveModal } if={ !opts.field.force }>
                 <i class={ 'fa fa-times' : true, 'fa-spin' : this.removing || opts.field.removing } />
               </button>
               <span class="btn btn-sm btn-secondary move" for={ opts.field.uuid }>
