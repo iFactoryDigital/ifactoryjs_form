@@ -46,6 +46,7 @@ class Form extends Model {
         // return render
         return data;
       }))).filter(b => b) : null,
+      action    : this.get('action'),
       fields    : this.get('fields') || [],
       placement : this.get('placement'),
       positions : this.get('positions') || [],

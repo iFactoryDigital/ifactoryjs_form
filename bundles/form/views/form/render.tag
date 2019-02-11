@@ -1,5 +1,5 @@
 <form-render>
-  <form ref="form" method={ opts.method || 'post' } action={ opts.action || '/form/submit' } class="form-render form-{ opts.placement.split('.').join('-') }">
+  <form ref="form" method={ opts.method || 'post' } action={ opts.action || getForm().action || '/form/submit' } class="form-render form-{ opts.placement.split('.').join('-') }">
     <div class="form-render-fields" data-form={ opts.placement } ref="fields" data-is="eden-fields" fields={ this.getFields() } preview={ opts.preview } form={ getForm() } on-save={ onSave } id={ opts.placement } positions={ opts.positions } />
   </form>
 

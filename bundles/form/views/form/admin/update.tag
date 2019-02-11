@@ -33,6 +33,14 @@
             <input type="text" id="slug" name="slug" class="form-control" ref="slug" data-input="slug" value={ form.get('slug') } onchange={ onInput }>
           </div>
           <div class="form-group">
+            <label for="placement">Form Placement</label>
+            <input type="text" id="placement" name="placement" class="form-control" ref="placement" data-input="placement" value={ form.get('placement') } onchange={ onInput }>
+          </div>
+          <div class="form-group">
+            <label for="action">Form Action</label>
+            <input type="text" id="action" name="action" class="form-control" ref="action" data-input="action" value={ form.get('action') } onchange={ onInput }>
+          </div>
+          <div class="form-group">
             <label for="layout">Form Layout</label>
             <input type="text" id="layout" name="layout" class="form-control" ref="layout" data-input="layout" value={ form.get('layout') } onchange={ onInput }>
           </div>

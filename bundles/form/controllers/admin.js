@@ -199,13 +199,11 @@ class FormAdminControler extends Controller {
 
     // update form
     form.set('user', req.user);
-    form.set('type', req.body.type);
     form.set('slug', req.body.slug);
     form.set('title', req.body.title);
     form.set('layout', req.body.layout);
-
-    // check placement
-    if (req.body.placement) form.set('placement', await Placement.findById(req.body.placement.id));
+    form.set('submit', req.body.submit);
+    form.set('placement', req.body.placement);
 
     // save form
     await form.save();
