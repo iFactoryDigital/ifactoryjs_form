@@ -69,7 +69,7 @@ class FormController extends Controller {
     }, async (req, field) => { }, async (req, field) => { });
 
     // register default field types
-    ['address', 'checkbox', 'date', 'file', 'email', 'image', 'phone', 'number', 'radio', 'select', 'text', 'textarea', 'user'].forEach((field) => {
+    ['address', 'checkbox', 'encrypt', 'date', 'file', 'email', 'image', 'phone', 'number', 'radio', 'select', 'text', 'textarea', 'user'].sort().forEach((field) => {
       // require field
       const FieldClass = require(`form/fields/${field}`);
 
@@ -307,7 +307,7 @@ class FormController extends Controller {
     form.set('positions', req.body.positions);
 
     // save placement
-    await form.save();
+    await form.save(req.user);
 
     // send alert
     req.alert('success', `Successfully ${create ? 'Created' : 'Updated'} form!`);

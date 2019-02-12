@@ -206,7 +206,7 @@ class FormAdminControler extends Controller {
     form.set('placement', req.body.placement);
 
     // save form
-    await form.save();
+    await form.save(req.user);
 
     // send alert
     req.alert('success', `Successfully ${create ? 'Created' : 'Updated'} form!`);
