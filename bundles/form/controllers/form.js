@@ -69,7 +69,7 @@ class FormController extends Controller {
     }, async (req, field) => { }, async (req, field) => { });
 
     // register default field types
-    ['address', 'checkbox', 'encrypt', 'date', 'file', 'email', 'image', 'phone', 'number', 'radio', 'select', 'text', 'textarea', 'user'].sort().forEach((field) => {
+    ['address', 'checkbox', 'encrypt', 'date', 'file', 'email', 'image', 'phone', 'number', 'radio', 'select', 'text', 'textarea'].sort().forEach((field) => {
       // require field
       const FieldClass = require(`form/fields/${field}`);
 
