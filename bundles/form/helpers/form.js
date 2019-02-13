@@ -52,6 +52,35 @@ class FormHelper extends Helper {
   }
 
   /**
+   * creates grid column for form field
+   *
+   * @param  {Form}   form
+   * @param  {Grid}   grid
+   * @param  {Object} field
+   * @param  {Object} opts
+   *
+   * @return {*}
+   */
+  async column(req, form, grid, field, opts) {
+    // get from register
+    const registered = fieldHelper.fields().find(b => b.type === field.type);
+
+    // return not registered
+    if (!registered) return;
+
+    // create column
+    grid.column(field.name, Object.assign({
+      tag   : 'element-column',
+      sort  : true,
+      meta  : {
+        field,
+        data : await registered.render(req, field, null),
+      },
+      title : field.label,
+    }, opts));
+  }
+
+  /**
    * renders form and values
    *
    * @param  {Request} req
