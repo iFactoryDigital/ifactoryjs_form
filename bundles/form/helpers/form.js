@@ -70,13 +70,16 @@ class FormHelper extends Helper {
 
     // create column
     grid.column(field.name, Object.assign({
-      tag   : 'element-column',
-      sort  : true,
-      meta  : {
+      tag  : 'element-column',
+      sort : true,
+      meta : {
         field,
         data : await registered.render(req, field, null),
       },
-      title : field.label,
+      title  : field.label,
+      update : (...args) => {
+        console.log(...args);
+      },
     }, opts));
   }
 
