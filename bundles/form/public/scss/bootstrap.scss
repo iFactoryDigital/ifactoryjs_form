@@ -2,3 +2,13 @@
 // import bootstrap select
 @import "~bootstrap-select/sass/bootstrap-select";
 @import "~ajax-bootstrap-select/dist/css/ajax-bootstrap-select.min";
+
+.field-column {
+  label {
+    display : none;
+  }
+  .form-control,
+  .form-group {
+    margin : 0;
+  }
+}

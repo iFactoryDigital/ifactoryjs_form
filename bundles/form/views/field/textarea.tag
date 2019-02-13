@@ -14,6 +14,16 @@
   <script>
     // do mixins
     this.mixin('acl');
+    
+    /**
+     * return value
+     *
+     * @return {*}
+     */
+    val() {
+      // get val
+      return jQuery('textarea', this.root).val();
+    }
 
     /**
      * on mount function

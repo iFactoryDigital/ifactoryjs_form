@@ -18,6 +18,16 @@
     
     // set initial value
     this.value = opts.data.value;
+    
+    /**
+     * return value
+     *
+     * @return {*}
+     */
+    val() {
+      // get val
+      return this.value;
+    }
 
     /**
      * renders location input

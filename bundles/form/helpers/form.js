@@ -69,7 +69,7 @@ class FormHelper extends Helper {
     if (!registered) return;
 
     // create column
-    grid.column(field.name, Object.assign({
+    grid.column(field.name || field.uuid, Object.assign({
       tag  : 'element-column',
       sort : true,
       meta : {
@@ -77,8 +77,24 @@ class FormHelper extends Helper {
         data : await registered.render(req, field, null),
       },
       title  : field.label,
-      update : (...args) => {
-        console.log(...args);
+      update : {
+        tag    : 'field-column',
+        submit : async (req, row, value) => {
+          // lock row
+          await row.lock();
+
+          // get data
+          const data = await registered.submit(req, field, value, await row.get(field.name || field.uuid));
+
+          // set data
+          row.set(field.name || field.uuid, data);
+
+          // save
+          await row.save(req.user);
+
+          // unlock row
+          row.unlock();
+        },
       },
     }, opts));
   }

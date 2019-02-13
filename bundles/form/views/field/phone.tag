@@ -25,6 +25,16 @@
     this.mixin('acl');
     
     /**
+     * return value
+     *
+     * @return {*}
+     */
+    val() {
+      // get val
+      return jQuery('input', this.root).val();
+    }
+    
+    /**
      * on class
 
      * @param  {Event} e
