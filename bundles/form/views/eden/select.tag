@@ -14,6 +14,16 @@
       // check initialized
       return !this.initialized;
     }
+    
+    /**
+     * return value
+     *
+     * @return {*}
+     */
+    val() {
+      // return value
+      return jQuery(this.refs.select).val();
+    }
 
     /**
      * on mount function
