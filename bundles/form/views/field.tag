@@ -80,9 +80,11 @@
               <input class="form-control" ref="label" value={ opts.field.label } onchange={ onLabel } />
             </div>
           </div>
+
           <yield from="modal" />
-          
+
           <hr if={ opts.isInput } />
+
           <div if={ opts.isInput }>
             <div class="form-group">
               <label>
@@ -93,7 +95,23 @@
                 <option value="false" selected={ !opts.field.required }>No</option>
               </select>
             </div>
+
             <yield from="validate" />
+
+          </div>
+
+          <hr if={ opts.language } />
+
+          <div if={ opts.language }>
+            <div class="form-group">
+              <label>
+                i18n
+              </label>
+              <select class="form-control" onchange={ onLanguage }>
+                <option value="true" selected={ opts.field.i18n }>Yes</option>
+                <option value="false" selected={ !opts.field.i18n }>No</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -126,6 +144,7 @@
   <script>
     // do mixins
     this.mixin('acl');
+    this.mixin('i18n');
     this.mixin('field');
 
     // set variables
@@ -223,7 +242,7 @@
       // run opts
       if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement, true);
     }
-    
+
     /**
      * on allow multiple
      *
@@ -242,7 +261,7 @@
       // run opts
       if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement, true);
     }
-    
+
     /**
      * on allow multiple
      *
@@ -257,6 +276,25 @@
 
       // set class
       opts.field.required = jQuery(e.target).val() === 'true';
+
+      // run opts
+      if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement, true);
+    }
+
+    /**
+     * on allow multiple
+     *
+     * @param  {Event}  e
+     *
+     * @return {Promise}
+     */
+    async onLanguage (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set class
+      opts.field.i18n = jQuery(e.target).val() === 'true';
 
       // run opts
       if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement, true);
