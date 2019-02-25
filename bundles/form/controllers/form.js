@@ -90,11 +90,11 @@ class FormController extends Controller {
 
     // on render
     this.eden.pre('view.compile', async (render) => {
-      // set Block
-      render.forms = {};
-
       // move menus
-      if (render.state.forms) {
+      if (render.state.forms && render.state.forms.length) {
+        // set Block
+        render.forms = {};
+
         // await promise
         await Promise.all(render.state.forms.map(async (placement) => {
         // get Block
@@ -106,10 +106,13 @@ class FormController extends Controller {
       }
 
       // check fields
-      if (!render.fields) {
+      if (!render.fields && !render.isJSON) {
         // render fields
         render.fields = fieldHelper.renderFields('frontend');
       }
+
+      // delete state fields
+      delete render.state.forms;
     });
   }
 
