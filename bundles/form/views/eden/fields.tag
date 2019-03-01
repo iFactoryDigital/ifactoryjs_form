@@ -320,7 +320,7 @@
         this.form.set(key, data.result[key]);
 
         // set in opts
-        if (data.result[key] && !opts.model) opts.form[key] = data.result[key];
+        if (opts.form && data.result[key] && !opts.model) opts.form[key] = data.result[key];
       }
       
       // set fields
@@ -328,6 +328,9 @@
       
       // push missing fields
       this.fields.push(...missing);
+      
+      // set forms
+      if (!window.eden.forms) window.eden.forms = {};
 
       // set in eden
       window.eden.forms[this.form.get('id')] = data.result;
@@ -386,6 +389,9 @@
 
       // set in eden
       if (data.result) {
+        // set forms
+        if (!window.eden.forms) window.eden.forms = {};
+          
         // set in eden
         window.eden.forms[this.form.get('id')] = data.result;
 
