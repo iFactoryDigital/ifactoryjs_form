@@ -1,7 +1,8 @@
 <form-render>
-  <form ref="form" method={ opts.method || 'post' } action={ opts.action || getForm().action || '/form/submit' } class="form-render form-{ opts.placement.split('.').join('-') }">
+  <form ref="form" if={ opts.action } method={ opts.method || 'post' } action={ opts.action || getForm().action || '/form/submit' } class="form-render form-{ opts.placement.split('.').join('-') }">
     <div class="form-render-fields" data-form={ opts.placement } ref="fields" data-is="eden-fields" fields={ this.getFields() } preview={ opts.preview } form={ getForm() } on-save={ onSave } id={ opts.placement } positions={ opts.positions } />
   </form>
+  <div if={ !opts.action } class="form-render-fields" data-form={ opts.placement } ref="fields" data-is="eden-fields" fields={ this.getFields() } preview={ opts.preview } form={ getForm() } on-save={ onSave } id={ opts.placement } positions={ opts.positions } />
 
   <script>
     // mixin acl

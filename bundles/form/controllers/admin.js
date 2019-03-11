@@ -8,8 +8,8 @@ const Form      = model('form');
 const Placement = model('placement');
 
 // bind helpers
-const FieldHelper = helper('form/field');
-const ModelHelper = helper('model');
+const fieldHelper = helper('form/field');
+const modelHelper = helper('model');
 
 /**
  * build user FormAdminControler controller
@@ -54,7 +54,7 @@ class FormAdminControler extends Controller {
     opts.socket.join(`form.${id}`);
 
     // add to room
-    return await ModelHelper.listen(opts.sessionID, await Form.findById(id), uuid);
+    return await modelHelper.listen(opts.sessionID, await Form.findById(id), uuid);
   }
 
   /**
@@ -68,7 +68,7 @@ class FormAdminControler extends Controller {
    */
   async liveDeafenAction(id, uuid, opts) {
     // add to room
-    return await ModelHelper.deafen(opts.sessionID, await Form.findById(id), uuid);
+    return await modelHelper.deafen(opts.sessionID, await Form.findById(id), uuid);
   }
 
   /**
@@ -159,7 +159,7 @@ class FormAdminControler extends Controller {
       name      : 'Admin Home',
       item      : await form.sanitise(req),
       title     : create ? 'Create form' : `Update ${form.get('_id').toString()}`,
-      fields    : FieldHelper.renderFields('frontend'),
+      fields    : fieldHelper.renderFields('frontend'),
       jumbotron : 'Update Form',
     });
   }
