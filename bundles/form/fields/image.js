@@ -67,7 +67,6 @@ class ImageField {
   async render(req, field, value) {
     // set tag
     field.tag = 'image';
-    console.log(value);
     field.value = value ? (Array.isArray(value) ? await Promise.all(value.map(item => item.sanitise())) : await value.sanitise()) : null;
 
     // return
