@@ -77,6 +77,10 @@ class FormHelper extends Helper {
         data : await registered.render(req, field, null),
       },
       title  : field.label,
+      format : async (col) => {
+        // return value
+        return (await registered.render(req, field, col)).value;
+      },
       update : {
         tag    : 'field-column',
         submit : async (req, row, value) => {

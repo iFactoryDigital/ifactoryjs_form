@@ -12,3 +12,9 @@
     margin : 0;
   }
 }
+
+.table {
+  .element-image img {
+    max-height : ($spacer * 5);
+  }
+}
