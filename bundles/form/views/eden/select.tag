@@ -1,5 +1,5 @@
 <eden-select>
-  <select class="selectpicker form-control" name={ opts.name } multiple={ opts.multiple } ref="select">
+  <select class="selectpicker form-control" name={ opts.name } multiple={ opts.multiple } ref="select" onchange={ opts.onChange }>
     <yield />
   </select>
 

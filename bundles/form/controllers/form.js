@@ -68,6 +68,20 @@ class FormController extends Controller {
       return field;
     }, async (req, field) => { }, async (req, field) => { });
 
+    // register simple field
+    fieldHelper.field('structure.card', {
+      for         : ['frontend', 'admin'],
+      title       : 'Card Element',
+      categories  : ['structure'],
+      description : 'Creates card structure',
+    }, async (req, field) => {
+      // set tag
+      field.tag = 'card';
+
+      // return
+      return field;
+    }, async (req, field) => { }, async (req, field) => { });
+
     // register default field types
     ['address', 'boolean', 'checkbox', 'encrypt', 'date', 'file', 'email', 'image', 'phone', 'number', 'radio', 'select', 'text', 'textarea', 'wysiwyg'].sort().forEach((field) => {
       // require field
