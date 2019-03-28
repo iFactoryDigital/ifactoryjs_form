@@ -1,5 +1,5 @@
 <eden-select>
-  <select class="selectpicker form-control" name={ opts.name } multiple={ opts.multiple } ref="select" onchange={ opts.onChange }>
+  <select class="selectpicker form-control" name={ opts.name } multiple={ opts.multiple } ref="select">
     <yield />
   </select>
 
@@ -65,6 +65,9 @@
             emptyTitle : opts.label
           },
           emptyRequest : true,
+        }).on('change', (e) => {
+          // on change
+          if (opts.onChange) opts.onChange(e);
         });
       }
     });
