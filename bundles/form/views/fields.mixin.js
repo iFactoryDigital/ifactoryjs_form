@@ -1,14 +1,20 @@
 
+// set events
+const Events = require('events');
+
 /**
  * construct fields mixin
  */
-class FieldsMixin {
+class FieldsMixin extends Events {
   /**
    * construct fields mixin
    *
    * @param {RiotElement} t
    */
   constructor(t) {
+    // run super
+    super();
+
     // set variables
     this.eden = t.eden;
     this.element = t;

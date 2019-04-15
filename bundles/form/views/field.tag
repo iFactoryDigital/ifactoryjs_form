@@ -414,6 +414,17 @@
       return fn.call(this);
     }
 
+    this.on('mount', () => {
+      // check frontend
+      if (!this.eden.frontend) return;
+
+      console.log(opts.helper);
+      window.testHelper = opts.helper;
+
+      // on update
+      opts.helper.on('update', this.update);
+    });
+
     // on unmount function
     this.on('unmount', () => {
       // check frontend
@@ -421,6 +432,9 @@
 
       // remove modal backdrops
       jQuery('.modal-backdrop').remove();
+
+      // on update
+      opts.helper.removeListener('update', this.update);
     });
   </script>
 </field>

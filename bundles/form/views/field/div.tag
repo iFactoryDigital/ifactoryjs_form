@@ -9,15 +9,15 @@
       <div if={ !opts.getFields(opts.field.children).length } class="py-5 text-center">Add Elements</div>
 
       <div class="{ opts.field.div } { this.acl.validate('admin') && !opts.preview ? 'eden-dropzone' : '' } { 'empty' : !opts.getFields(opts.field.children).length }" data-placement={ opts.placement + '.children' }>
-        <div each={ child, a in opts.getFields(opts.field.children) } no-reorder class={ child.class } data-is={ opts.getElement(child) } preview={ opts.preview } data-field={ child.uuid } data={ opts.getField(child) } field={ child } get-field={ opts.getField } on-add-field={ opts.onAddField } on-save={ opts.onSave } on-remove={ opts.onRemove } on-refresh={ opts.onRefresh } on-update={ opts.onUpdate } i={ a } placement={ opts.placement + '.children.' + a } />
+        <div each={ child, a in opts.getFields(opts.field.children) } no-reorder class={ child.class } data-is={ opts.getElement(child) } preview={ opts.preview } data-field={ child.uuid } data={ opts.getField(child) } field={ child } helper={ opts.helper } get-field={ opts.getField } on-add-field={ opts.onAddField } on-save={ opts.onSave } on-remove={ opts.onRemove } on-refresh={ opts.onRefresh } on-update={ opts.onUpdate } i={ a } placement={ opts.placement + '.children.' + a } />
       </div>
-      
+
       <eden-add type="bottom" onclick={ opts.onAddField } way="push" placement={ opts.placement + '.children' } if={ this.acl.validate('admin') && !opts.preview } />
       <span class="eden-dropzone-label eden-dropzone-label-end" if={ this.acl.validate('admin') && !opts.preview }>
         Div #{ opts.placement } End
       </span>
     </yield>
-    
+
     <yield to="modal">
       <div class="form-group">
         <label>
@@ -27,14 +27,14 @@
       </div>
     </yield>
   </field>
-  
+
   <script>
     // do mixins
     this.mixin('acl');
-    
+
     // set value
     if (!opts.field.children) opts.field.children = [];
-    
+
     /**
      * get fields
      *
@@ -46,7 +46,7 @@
       // return filtered fields
       return (fields || []).filter((child) => child);
     }
-    
+
     /**
      * get element
      *
@@ -75,6 +75,6 @@
       // run opts
       if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement);
     }
-    
+
   </script>
 </field-div>

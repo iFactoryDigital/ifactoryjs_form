@@ -11,7 +11,7 @@
       <div class="{ opts.field.card || 'card' } { this.acl.validate('admin') && !opts.preview ? 'eden-dropzone' : '' } { 'empty' : !opts.getFields(opts.field.children).length }" data-placement={ opts.placement + '.children' }>
         <div class="card-header" if={ (opts.field.title || '').length }>{ opts.field.title }</div>
         <div class="{ opts.field.body || 'card-body' }">
-          <div each={ child, a in opts.getFields(opts.field.children) } no-reorder class={ child.class } data-is={ opts.getElement(child) } preview={ opts.preview } data-field={ child.uuid } data={ opts.getField(child) } field={ child } get-field={ opts.getField } on-add-field={ opts.onAddField } on-save={ opts.onSave } on-remove={ opts.onRemove } on-refresh={ opts.onRefresh } on-update={ opts.onUpdate } i={ a } placement={ opts.placement + '.children.' + a } />
+          <div each={ child, a in opts.getFields(opts.field.children) } no-reorder class={ child.class } data-is={ opts.getElement(child) } preview={ opts.preview } data-field={ child.uuid } data={ opts.getField(child) } field={ child } helper={ opts.helper } get-field={ opts.getField } on-add-field={ opts.onAddField } on-save={ opts.onSave } on-remove={ opts.onRemove } on-refresh={ opts.onRefresh } on-update={ opts.onUpdate } i={ a } placement={ opts.placement + '.children.' + a } />
         </div>
       </div>
       
