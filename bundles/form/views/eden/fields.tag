@@ -6,7 +6,7 @@
         { this.form.get('title') }
       </span>
       <eden-add type="top" onclick={ onAddField } way="unshift" form="" if={ this.acl.validate('admin') && !opts.preview } />
-      <div each={ el, i in getFields() } el={ el } no-reorder class={ el.class } data-is={ getElement(el) } preview={ this.preview } data-field={ el.uuid } data={ getField(el) } field={ el } get-field={ getField } on-add-field={ onAddField } on-save={ this.onSaveField } on-remove={ onRemoveField } on-refresh={ this.onRefreshField } placement={ i } i={ i } />
+      <div each={ el, i in getFields() } el={ el } no-reorder class={ el.class } data-is={ getElement(el) } preview={ this.preview } data-field={ el.uuid } data={ getField(el) } field={ el } get-field={ getField } on-add-field={ onAddField } on-save={ this.onSaveField } on-remove={ onRemoveField } on-refresh={ this.onRefreshField } on-update={ onUpdate } placement={ i } i={ i } />
       <eden-add type="bottom" onclick={ onAddField } way="push" form="" if={ this.acl.validate('admin') && !opts.preview } />
     </div>
   </div>
@@ -282,6 +282,18 @@
       // save form
       await this.onSaveField(field, {});
 
+      // update view
+      this.update();
+    }
+
+    /**
+     * adds field by type
+     *
+     * @param  {String} type
+     *
+     * @return {*}
+     */
+    async onUpdate () {
       // update view
       this.update();
     }
