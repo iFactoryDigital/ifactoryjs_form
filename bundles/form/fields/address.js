@@ -30,6 +30,7 @@ class AddressField {
    * @return {*}
    */
   submit(req, field, value, old) {
+    console.log(value);
     // run try/catch
     try {
       // return value

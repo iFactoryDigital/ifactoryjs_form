@@ -30,7 +30,9 @@
       </div>
     </div>
 
-    <yield from="body" />
+    <div show={ shouldShow() }>
+      <yield from="body" />
+    </div>
   </div>
 
   <div class="modal fade" ref="update" id="field-{ opts.field.uuid }-update" tabindex="-1" role="dialog" aria-labelledby="field-{ opts.field.uuid }-label" aria-hidden="true" if={ this.modal.update && this.acl.validate('admin') && !opts.preview }>
@@ -82,6 +84,15 @@
           </div>
 
           <yield from="modal" />
+
+          <hr />
+
+          <div class="form-group">
+            <label>
+              Field Display
+            </label>
+            <input class="form-control" ref="display" value={ opts.field.display || 'true' } onchange={ onDisplay } />
+          </div>
 
           <hr if={ opts.isInput } />
 
@@ -195,7 +206,7 @@
     /**
      * on class
 
-     * @param  {Event} e
+     * @param {Event} e
      */
     async onClass (e) {
       // prevent default
@@ -204,6 +215,23 @@
 
       // set class
       opts.field.class = e.target.value.length ? e.target.value : null;
+
+      // run opts
+      if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement, true);
+    }
+
+    /**
+     * on display
+     *
+     * @param {Event} e
+     */
+    async onDisplay (e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set class
+      opts.field.display = e.target.value.length ? e.target.value : null;
 
       // run opts
       if (opts.onSave) await opts.onSave(opts.field, opts.data, opts.placement, true);
@@ -359,6 +387,31 @@
 
       // update view
       this.update();
+    }
+
+    /**
+     * should show
+     *
+     * @return {*}
+     */
+    shouldShow() {
+      // should show
+      if (opts.shouldShow) return opts.shouldShow();
+
+      // return true
+      if (!opts.field.display || !opts.field.display.length) return true;
+
+      // check preview
+      if (!opts.preview) return true;
+
+      // bind to this
+      const fn = new Function(`return ${opts.field.display}`);
+
+      // bind function
+      fn.bind(this);
+
+      // set should
+      return fn.call(this);
     }
 
     // on unmount function

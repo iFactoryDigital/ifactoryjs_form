@@ -41,8 +41,8 @@
       input.geocomplete().on('geocode:result', (e, result) => {
         // set values
         this.value = {
-          'id'         : result.id,
-          'geo'        : {
+          'id'  : result.id,
+          'geo' : {
             'lat' : result.geometry.location.lat(),
             'lng' : result.geometry.location.lng()
           },

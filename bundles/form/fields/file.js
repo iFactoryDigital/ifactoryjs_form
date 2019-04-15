@@ -34,7 +34,6 @@ class FileField {
    */
   async submit(req, field, value, old) {
     // check array
-    if (!value) value = [];
     if (!Array.isArray(value)) value = [value];
 
     // return value map
