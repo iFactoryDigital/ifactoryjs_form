@@ -418,11 +418,8 @@
       // check frontend
       if (!this.eden.frontend) return;
 
-      console.log(opts.helper);
-      window.testHelper = opts.helper;
-
       // on update
-      opts.helper.on('update', this.update);
+      if (opts.field.display) opts.helper.on('update', this.update);
     });
 
     // on unmount function
@@ -434,7 +431,7 @@
       jQuery('.modal-backdrop').remove();
 
       // on update
-      opts.helper.removeListener('update', this.update);
+      if (opts.field.display) opts.helper.removeListener('update', this.update);
     });
   </script>
 </field>
