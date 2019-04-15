@@ -1,5 +1,5 @@
 <field-address>
-  <field ref="field" is-input={ true } class="field-container-inner" value={ this.value } get-fields={ getFields } get-element={ getElement }>
+  <field ref="field" is-input={ true } class="field-container-inner" value={ this.value } get-fields={ getFields } get-element={ getElement } on-change={ onChange }>
     <yield to="body">
       <div class={ opts.field.group || 'form-group' }>
         <label for={ opts.field.uuid + '-geo' }>
@@ -7,7 +7,7 @@
           <i if={ !opts.field.label }>Set Label</i>
         </label>
         <input type="hidden" name={ opts.field.uuid + '[address]' } value={ JSON.stringify(opts.value) } />
-        <input type="text" name={ opts.field.uuid + '[geo]' } required={ opts.field.required } class="{ opts.field.field || 'form-control' }{ 'form-control-active' : false }" id={ opts.field.uuid + '-geo' } value={ (opts.value || {}).formatted || '' }>
+        <input type="text" name={ opts.field.uuid + '[geo]' } required={ opts.field.required } class="{ opts.field.field || 'form-control' }{ 'form-control-active' : false }" id={ opts.field.uuid + '-geo' } value={ (opts.value || {}).formatted || '' } on-change={ onChange }>
       </div>
     </yield>
   </field>
@@ -27,6 +27,19 @@
     val() {
       // get val
       return this.value;
+    }
+
+    /**
+     * on change
+     *
+     * @param {Event} e
+     */
+    onChange(e) {
+      // set value
+      opts.data.value = this.val();
+
+      // emit update
+      opts.helper.emit('update');
     }
 
     /**

@@ -1,10 +1,10 @@
 <field-wysiwyg>
-  <field ref="field" is-input={ true } class="field-container-inner" on-container-class={ onFieldClass } get-fields={ getFields } get-element={ getElement } languages={ this.languages } language={ this.language }>
+  <field ref="field" is-input={ true } class="field-container-inner" on-container-class={ onFieldClass } get-fields={ getFields } get-element={ getElement } languages={ this.languages } language={ this.language } on-change={ onChange }>
     <yield to="body">
       <div if={ opts.field.i18n } each={ lng, i in opts.languages } hide={ i18n.lang() !== lng }>
-        <editor name="{ opts.field.uuid }[{ lng }]" label={ opts.field.label || 'Set Label' } content={ (opts.data.value || '')[lng] || opts.data.value } required={ opts.field.required } />
+        <editor name="{ opts.field.uuid }[{ lng }]" label={ opts.field.label || 'Set Label' } content={ (opts.data.value || '')[lng] || opts.data.value } required={ opts.field.required } on-change={ opts.onChange } />
       </div>
-      <editor if={ !opts.field.i18n } name="{ opts.field.uuid }" label={ opts.field.label || 'Set Label' } content={ (opts.data.value || '')[lng] || opts.data.value } required={ opts.field.required } />
+      <editor if={ !opts.field.i18n } name="{ opts.field.uuid }" label={ opts.field.label || 'Set Label' } content={ (opts.data.value || '')[lng] || opts.data.value } required={ opts.field.required } on-change={ opts.onChange } />
     </yield>
   </field>
   
@@ -40,6 +40,19 @@
         // return non accumulated value
         return jQuery('textarea', this.root).val();
       }
+    }
+
+    /**
+     * on change
+     *
+     * @param {Event} e
+     */
+    onChange(e) {
+      // set value
+      opts.data.value = this.val();
+
+      // emit update
+      opts.helper.emit('update');
     }
 
     /**

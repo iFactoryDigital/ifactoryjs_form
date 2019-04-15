@@ -414,6 +414,7 @@
       return fn.call(this);
     }
 
+    // on mount add helper update listener
     this.on('mount', () => {
       // check frontend
       if (!this.eden.frontend) return;
