@@ -4,8 +4,7 @@ const Grid       = require('grid');
 const Controller = require('controller');
 
 // require models
-const Form      = model('form');
-const Placement = model('placement');
+const Form = model('form');
 
 // bind helpers
 const fieldHelper = helper('form/field');
