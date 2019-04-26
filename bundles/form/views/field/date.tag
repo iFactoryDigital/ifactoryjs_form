@@ -20,7 +20,7 @@
      */
     val() {
       // get val
-      return this.refs.date.value;
+      return this.refs.field.refs.date.val();
     }
 
     /**

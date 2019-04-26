@@ -33,7 +33,7 @@ class DateField {
     // try catch
     try {
       // let date
-      let date = new Date(value.iso);
+      let date = new Date(value);
 
       // check isNan
       if (isNaN(date.getTime())) date = null;
