@@ -4,6 +4,9 @@
       <span if={ !opts.field.options }>
         Add Options
       </span>
+      <label if={ opts.field.label }>
+        { opts.field.label }
+      </label>
       <validate type="checkbox" ref="checkbox" each={ option, i in field().options } group-class={ field().group || 'form-group' } name="{ field().uuid }[{ option.label }]" label={ option.label } data-value={ option.value } required={ field().required } on-change={ opts.onChange } checked={ (data().value || {})[option.label] === option.value } />
     </yield>
 
@@ -34,8 +37,6 @@
     // do mixins
     this.mixin('acl');
     this.mixin('i18n');
-    
-    console.log(opts.data);
 
     // get languages
     this.language  = this.i18n.lang();
