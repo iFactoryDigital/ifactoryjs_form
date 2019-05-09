@@ -84,6 +84,7 @@ class FormHelper extends Helper {
       update : {
         tag    : 'field-column',
         submit : async (req, row, value) => {
+          console.log(req, row, value);
           // lock row
           await row.lock();
 

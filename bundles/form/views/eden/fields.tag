@@ -3,8 +3,9 @@
 
     <div class="{ 'eden-dropzone' : this.acl.validate('admin') && !opts.preview } { 'empty' : !getFields().length }" ref="form" data-placement="" if={ !this.updating }>
       <span class="eden-dropzone-label" if={ this.acl.validate('admin') && !opts.preview }>
-        { this.form.get('title') }
+        { this.form.get('title') || this.form.get('placement') }
       </span>
+      
       <eden-add type="top" onclick={ onAddField } way="unshift" form="" if={ this.acl.validate('admin') && !opts.preview } />
       <div each={ el, i in getFields() } el={ el } no-reorder class={ el.class } data-is={ getElement(el) } preview={ this.preview } data-field={ el.uuid } data={ getField(el) } field={ el } helper={ this.helper } get-field={ getField } on-add-field={ onAddField } on-save={ this.onSaveField } on-remove={ onRemoveField } on-refresh={ this.onRefreshField } on-update={ onUpdate } placement={ i } i={ i } />
       <eden-add type="bottom" onclick={ onAddField } way="push" form="" if={ this.acl.validate('admin') && !opts.preview } />

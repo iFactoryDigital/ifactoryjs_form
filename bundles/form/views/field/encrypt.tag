@@ -4,7 +4,7 @@
       <validate type="password" group-class={ opts.field.group || 'form-group' } name={ opts.field.uuid } label={ opts.field.label || 'Set Label' } data-value={ opts.data.value } required={ opts.field.required } min-length={ (opts.field.validateLength || {}).min } max-length={ (opts.field.validateLength || {}).max } on-change={ opts.onChange } />
     </yield>
     
-    <yield to="validate">
+    <yield to="validation">
       <div class="form-group">
         <label>
           Min Length

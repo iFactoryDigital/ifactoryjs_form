@@ -86,9 +86,40 @@
      *
      * @return {*}
      */
-    submit () {
-      // submit form
-      return jQuery(this.refs.form).submit();
+    async submit (isJSON) {
+      // check json
+      if (!isJSON) {
+        // submit form
+        return jQuery(this.refs.form).submit();
+      } else {
+        // Get url
+        let url = this.refs.form.getAttribute('action') || window.location.href.split(this.eden.get('config').domain)[1];
+
+        // Set request
+        const opts = {
+          method  : this.refs.form.getAttribute('method') || 'POST',
+          headers : {
+            Accept : 'application/json',
+          },
+          redirect    : 'follow',
+          credentials : 'same-origin',
+        };
+
+        // Set body
+        if (opts.method.toUpperCase() === 'POST') {
+          // Set to body
+          opts.body = new FormData(this.refs.form);
+        } else {
+          // Add to url
+          url += `?${jQuery(this.refs.form).serialize()}`;
+        }
+
+        // Run fetch
+        const res = await fetch(url, opts);
+
+        // Run json
+        return await res.json();
+      }
     }
 
   </script>

@@ -7,7 +7,7 @@
       <validate if={ !opts.field.i18n } type="text" group-class={ opts.field.group || 'form-group' } name={ opts.field.uuid } label={ opts.field.label || 'Set Label' } data-value={ (opts.data.value || '')[opts.language] || opts.data.value } on-change={ opts.onChange } required={ opts.field.required } min-length={ (opts.field.validateLength || {}).min } max-length={ (opts.field.validateLength || {}).max } />
     </yield>
 
-    <yield to="validate">
+    <yield to="validation">
       <div class="form-group">
         <label>
           Min Length

@@ -59,7 +59,7 @@
       opts.data.value = this.refs.field.refs.select.val();
 
       // emit update
-      opts.helper.emit('update');
+      if (opts.helper) opts.helper.emit('update');
     }
 
     /**
