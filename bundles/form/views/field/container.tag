@@ -1,5 +1,5 @@
 <field-container>
-  <field ref="field" class="field-container-inner" on-container-class={ onContainerClass } get-fields={ getFields } get-element={ getElement }>
+  <field ref="field" class="field-container-inner" is-container={ true } on-container-class={ onContainerClass } get-fields={ getFields } get-element={ getElement }>
     <yield to="body">
       <span class="eden-dropzone-label" if={ this.acl.validate('admin') && !opts.preview }>
         Container #{ opts.placement }

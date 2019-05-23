@@ -1,5 +1,5 @@
 <field-card>
-  <field ref="field" class="field-card-inner" on-card-class={ onCardClass } on-card-body-class={ onCardBodyClass } on-card-title={ onCardTitle } get-fields={ getFields } get-element={ getElement }>
+  <field ref="field" class="field-card-inner" is-container={ true } on-card-class={ onCardClass } on-card-body-class={ onCardBodyClass } on-card-title={ onCardTitle } get-fields={ getFields } get-element={ getElement }>
     <yield to="body">
       <span class="eden-dropzone-label" if={ this.acl.validate('admin') && !opts.preview }>
         Card #{ opts.placement }
