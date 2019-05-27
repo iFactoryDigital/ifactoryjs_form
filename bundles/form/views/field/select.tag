@@ -1,7 +1,7 @@
 <field-select>
-  <field ref="field" is-input={ true } class="field-select-inner" on-option={ onOption } on-remove-option={ onRemoveOption } on-option-name={ onOptionName } on-option-save={ onOptionSave } language={ this.language } languages={ languages } on-change={ onChange }>
+  <field ref="field" is-input={ true } class="field-select-inner" is-multiple={ true } on-option={ onOption } on-remove-option={ onRemoveOption } on-option-name={ onOptionName } on-option-save={ onOptionSave } language={ this.language } languages={ languages } on-change={ onChange }>
     <yield to="body">
-      <validate type="select" ref="select" options={ opts.field.options } group-class={ opts.field.group || 'form-group' } name={ opts.field.uuid } label={ opts.field.label || 'Set Label' } data-value={ (opts.data.value || '')[opts.language] || opts.data.value } required={ opts.field.required } on-change={ opts.onChange } />
+      <validate type="select" ref="select" options={ opts.field.options } group-class={ opts.field.group || 'form-group' } multiple={ opts.field.multiple } name={ opts.field.uuid } label={ opts.field.label || 'Set Label' } data-value={ (opts.data.value || '')[opts.language] || opts.data.value } required={ opts.field.required } on-change={ opts.onChange } />
     </yield>
 
     <yield to="modal">
