@@ -43,7 +43,7 @@
       if (!field) return;
 
       // get found
-      let found = this.fields.find((b) => b.uuid === field.uuid);
+      let found = this.fields.find((b) => b.uuid === field.uuid || (field.name && b.name && field.name === b.name));
 
       // gets data for field
       if (!found) return null;
