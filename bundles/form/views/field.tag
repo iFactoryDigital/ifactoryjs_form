@@ -12,10 +12,10 @@
           <div class="w-100">
             <div class="btn-group float-right">
               <yield from="buttons" />
-              <button class="btn btn-sm btn-secondary" onclick={ onUpdateModal }>
+              <button class="btn btn-sm btn-secondary" onclick={ onUpdateSidebar }>
                 <i class="fa fa-pencil" />
               </button>
-              <button class="btn btn-sm btn-secondary" onclick={ onRemoveModal } if={ !opts.field.force }>
+              <button class="btn btn-sm btn-secondary" onclick={ onRemoveSidebar } if={ !opts.field.force }>
                 <i class={ 'fa fa-times' : true, 'fa-spin' : this.removing || opts.field.removing } />
               </button>
               <span class="btn btn-sm btn-secondary move" for={ opts.field.uuid }>
@@ -32,62 +32,62 @@
     </div>
   </div>
 
-  <div class="modal fade" ref="update" id="field-{ opts.field.uuid }-update" tabindex="-1" role="dialog" aria-labelledby="field-{ opts.field.uuid }-label" aria-hidden="true" if={ this.modal.update && this.acl.validate('admin') && !opts.preview }>
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">
-            Update Field
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-        
-          <div class="form-group">
-            <label>
-              Name
-            </label>
-            <input class="form-control" ref="name" value={ opts.field.name } onchange={ onName } />
-          </div>
+  <div class="eden-blocks-backdrop" if={ this.showing } onclick={ ohHideSidebar } />
 
-          <yield from="modal" />
-        
+  <div class={ 'eden-blocks-sidebar' : true, 'eden-blocks-sidebar-show' : this.sidebar.update } ref="update" if={ this.showing && this.acl.validate('admin') && !opts.preview }>
+    <div class="card">
+      <div class="card-header">
+        <h5 class="m-0">
+          Update Field
+        </h5>
+      </div>
+      <div class="card-body h-50">
+      
+        <div class="form-group">
+          <label>
+            Name
+          </label>
+          <input class="form-control" ref="name" value={ opts.field.name } onchange={ onName } />
         </div>
+
+        <yield from="modal" />
+      
+      </div>
+      
+      <div class="card-header border-top">
         
-        <div class="modal-footer d-block">
-          
-          <nav class="nav nav-tabs mb-4">
-            <a each={ tab, i in this.tabs } class={ 'nav-item nav-link' : true, 'active' : isTab(tab) } href="#" onclick={ onTab }>{ tab }</a>
-          </nav>
-          
-          <div data-is="field-tab-{ tab.toLowerCase() }" field={ opts.field } data={ opts.data } is-input={ opts.isInput } is-multiple={ opts.isMultiple } on-save={ opts.onSave } i18n={ opts.i18n || opts.language } />
-          
-        </div>
+        <nav class="nav nav-tabs card-header-tabs">
+          <a each={ tab, i in this.tabs } class={ 'nav-item nav-link' : true, 'active' : isTab(tab) } href="#" onclick={ onTab }>{ tab }</a>
+        </nav>
+        
+      </div>
+      <div class="card-body">
+
+        <div data-is="field-tab-{ tab.toLowerCase() }" field={ opts.field } data={ opts.data } is-input={ opts.isInput } is-multiple={ opts.isMultiple } on-save={ opts.onSave } i18n={ opts.i18n || opts.language } />
+        
+      </div>
+      <div class="card-footer">
+        <button class={ 'btn btn-secondary float-right' : true, 'disabled' : this.removing } onclick={ hide } disabled={ this.removing }>
+          Close
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" ref="remove" id="field-{ opts.field.uuid }-remove" tabindex="-1" role="dialog" aria-labelledby="field-{ opts.field.uuid }-label" aria-hidden="true" if={ this.modal.remove && this.acl.validate('admin') && !opts.preview }>
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">
-            Remove Field
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to remove this field?
-        </div>
-        <div class="modal-footer">
-          <button class={ 'btn btn-danger float-right' : true, 'disabled' : this.removing } onclick={ onRemove } disabled={ this.removing }>
-            { this.removing ? 'Removing...' : 'Remove' }
-          </button>
-        </div>
+  <div class={ 'eden-blocks-sidebar' : true, 'eden-blocks-sidebar-show' : this.sidebar.remove } if={ this.showing && this.acl.validate('admin') && !opts.preview }>
+    <div class="card">
+      <div class="card-header">
+        <h5 class="m-0">
+          Remove Field
+        </h5>
+      </div>
+      <div class="card-body">
+        Are you sure you want to remove this field?
+      </div>
+      <div class="card-footer">
+        <button class={ 'btn btn-danger' : true, 'disabled' : this.removing } onclick={ onRemove } disabled={ this.removing }>
+          { this.removing ? 'Removing...' : 'Remove' }
+        </button>
       </div>
     </div>
   </div>
@@ -100,8 +100,7 @@
 
     // set variables
     this.tabs = opts.tabs || ['Display', 'Validation', 'Visibility', 'Events'];
-    this.modal = {};
-    this.loading = {};
+    this.sidebar = {};
     this.updating = {};
       
     // set tab
@@ -130,19 +129,21 @@
 
      * @param  {Event} e
      */
-    onUpdateModal (e) {
+    onUpdateSidebar (e) {
       // prevent default
       e.preventDefault();
       e.stopPropagation();
 
       // set class
-      this.modal.update = true;
+      this.showing = true;
 
       // update view
       this.update();
+      this.sidebar.update = true;
+      this.sidebar.remove = false;
 
-      // run opts
-      jQuery(this.refs.update).modal('show');
+      // update view
+      this.update();
     }
 
     /**
@@ -150,19 +151,43 @@
 
      * @param  {Event} e
      */
-    onRemoveModal (e) {
+    onRemoveSidebar (e) {
       // prevent default
       e.preventDefault();
       e.stopPropagation();
 
       // set class
-      this.modal.remove = true;
+      this.showing = true;
 
       // update view
       this.update();
+      this.sidebar.update = false;
+      this.sidebar.remove = true;
 
-      // run opts
-      jQuery(this.refs.remove).modal('show');
+      // update view
+      this.update();
+    }
+
+    /**
+     * on remove modal
+
+     * @param  {Event} e
+     */
+    ohHideSidebar(e) {
+      // prevent default
+      e.preventDefault();
+      e.stopPropagation();
+
+      // set class
+      this.showing = false;
+
+      // update view
+      this.update();
+      this.sidebar.update = false;
+      this.sidebar.remove = false;
+
+      // update view
+      this.update();
     }
 
     /**

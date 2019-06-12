@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <field-modal fields={ opts.fields } add-field={ onSetField } />
+  <field-sidebar ref="sidebar" fields={ opts.fields } add-field={ onSetField } />
 
   <script>
     // do mixins
@@ -90,7 +90,7 @@
       this.fieldPos = target.attr('placement');
 
       // open modal
-      jQuery('.add-field-modal', this.root).modal('show');
+      this.refs.sidebar.show();
     }
 
     /**
