@@ -445,8 +445,11 @@
         // get current form
         let placement = jQuery(el).attr('placement');
 
+        // get parent
+        target = jQuery(el).parent()[0];
+
         // check target
-        if (!target || !source || !el) return;
+        if (!target || !source || !el || (target && !jQuery(target).hasClass('eden-dropzone'))) return;
 
         // get fields of target
         let fields = [];
