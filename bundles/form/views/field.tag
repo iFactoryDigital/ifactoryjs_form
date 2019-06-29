@@ -13,7 +13,7 @@
             <div class="btn-group float-right">
               <yield from="buttons" />
               <button class="btn btn-sm btn-secondary" onclick={ onUpdateSidebar }>
-                <i class="fa fa-pencil" />
+                <i class="fa fa-pencil-alt" />
               </button>
               <button class="btn btn-sm btn-secondary" onclick={ onRemoveSidebar } if={ !opts.field.force }>
                 <i class={ 'fa fa-times' : true, 'fa-spin' : this.removing || opts.field.removing } />
