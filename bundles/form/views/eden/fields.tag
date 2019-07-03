@@ -448,6 +448,8 @@
         // get parent
         target = jQuery(el).parent()[0];
 
+        console.log(jQuery(el), target);
+
         // check target
         if (!target || !source || !el || (target && !jQuery(target).hasClass('eden-dropzone'))) return;
 
