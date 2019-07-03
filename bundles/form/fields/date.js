@@ -36,6 +36,7 @@ class DateField {
       let date = new Date(value);
 
       // check isNan
+      // eslint-disable-next-line no-restricted-globals
       if (isNaN(date.getTime())) date = null;
 
       // return date

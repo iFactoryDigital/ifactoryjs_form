@@ -94,6 +94,8 @@ class FormAdminControler extends Controller {
 
     // return JSON
     res.json({
+      create,
+
       state   : 'success',
       result  : sanitised,
       message : 'Successfully got blocks',
@@ -127,9 +129,9 @@ class FormAdminControler extends Controller {
    * @layout   admin
    * @priority 12
    */
-  createAction() {
+  createAction(...args) {
     // return update action
-    return this.updateAction(...arguments);
+    return this.updateAction(...args);
   }
 
   /**
@@ -169,9 +171,9 @@ class FormAdminControler extends Controller {
    * @route   {post} /create
    * @layout  admin
    */
-  createSubmitAction() {
+  createSubmitAction(...args) {
     // return update action
-    return this.updateSubmitAction(...arguments);
+    return this.updateSubmitAction(...args);
   }
 
 
@@ -312,19 +314,19 @@ class FormAdminControler extends Controller {
     }).column('type', {
       sort   : true,
       title  : 'Type',
-      format : async (col, row) => {
+      format : async (col) => {
         return col ? col.toString() : '<i>N/A</i>';
       },
     }).column('title', {
       sort   : true,
       title  : 'Title',
-      format : async (col, row) => {
+      format : async (col) => {
         return col ? (col[req.language] || '').toString() : '<i>N/A</i>';
       },
     }).column('layout', {
       sort   : true,
       title  : 'Layout',
-      format : async (col, row) => {
+      format : async (col) => {
         return col ? col.toString() : '<i>N/A</i>';
       },
     })
@@ -414,4 +416,4 @@ class FormAdminControler extends Controller {
  *
  * @type {ADMIN}
  */
-exports = module.exports = FormAdminControler;
+module.exports = FormAdminControler;

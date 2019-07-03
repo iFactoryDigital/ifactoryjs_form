@@ -1,3 +1,5 @@
+/* eslint-disable no-empty */
+/* eslint-disable global-require */
 
 // require dependencies
 const socket     = require('socket');
@@ -38,7 +40,7 @@ class FormController extends Controller {
 
       // return
       return field;
-    }, async (req, field) => { }, async (req, field) => { });
+    }, async () => { }, async () => { });
 
     // register simple field
     fieldHelper.field('structure.row', {
@@ -52,7 +54,7 @@ class FormController extends Controller {
 
       // return
       return field;
-    }, async (req, field) => { }, async (req, field) => { });
+    }, async () => { }, async () => { });
 
     // register simple field
     fieldHelper.field('structure.div', {
@@ -66,7 +68,7 @@ class FormController extends Controller {
 
       // return
       return field;
-    }, async (req, field) => { }, async (req, field) => { });
+    }, async () => { }, async () => { });
 
     // register simple field
     fieldHelper.field('structure.card', {
@@ -80,11 +82,12 @@ class FormController extends Controller {
 
       // return
       return field;
-    }, async (req, field) => { }, async (req, field) => { });
+    }, async () => { }, async () => { });
 
     // register default field types
     ['address', 'boolean', 'checkbox', 'encrypt', 'date', 'file', 'email', 'image', 'phone', 'number', 'radio', 'select', 'text', 'textarea', 'wysiwyg'].sort().forEach((field) => {
       // require field
+      // eslint-disable-next-line import/no-dynamic-require
       const FieldClass = require(`form/fields/${field}`);
 
       // initialize class
@@ -141,7 +144,7 @@ class FormController extends Controller {
    */
   async listenAction(id, uuid, opts) {
     // / return if no id
-    if (!id) return;
+    if (!id) return null;
 
     // join room
     opts.socket.join(`placement.${id}`);
@@ -161,7 +164,7 @@ class FormController extends Controller {
    */
   async deafenAction(id, uuid, opts) {
     // / return if no id
-    if (!id) return;
+    if (!id) return null;
 
     // add to room
     return await modelHelper.deafen(opts.sessionID, await Form.findById(id), uuid);
@@ -217,6 +220,8 @@ class FormController extends Controller {
   /**
    * save field action
    *
+   * @returns  {*}
+   *
    * @route    {post} /:id/field/save
    * @layout   admin
    * @priority 12
@@ -263,7 +268,7 @@ class FormController extends Controller {
     socket.room(`form.${form.get('_id').toString()}`, `form.${form.get('_id').toString()}.field`, rendered);
 
     // return JSON
-    res.json({
+    return res.json({
       state   : 'success',
       result  : rendered,
       message : 'Successfully saved field',
@@ -348,8 +353,8 @@ class FormController extends Controller {
     // set Block
     res.locals.forms = [];
 
-    // create Block method
-    res.form = req.form = (form) => {
+    // create middle function
+    const middleFunction = (form) => {
       // check locals
       if (!Array.isArray(res.locals.forms)) res.locals.forms = [];
 
@@ -359,6 +364,10 @@ class FormController extends Controller {
       // add to Block
       res.locals.forms.push(form);
     };
+
+    // create Block method
+    res.form = middleFunction;
+    req.form = middleFunction;
 
     // run next
     return next();

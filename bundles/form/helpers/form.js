@@ -13,14 +13,6 @@ const fieldHelper = helper('form/field');
  */
 class FormHelper extends Helper {
   /**
-   * construct placement helper
-   */
-  constructor() {
-    // run super
-    super();
-  }
-
-  /**
    * gets form
    *
    * @param  {String} placement
@@ -83,12 +75,13 @@ class FormHelper extends Helper {
       },
       update : {
         tag    : 'field-column',
-        submit : async (req, row, value) => {
+        submit : async (subReq, row, value) => {
           // lock row
           await row.lock();
 
           // get data
-          const data = await registered.submit(req, field, value, await row.get(field.name || field.uuid));
+          // eslint-disable-next-line max-len
+          const data = await registered.submit(subReq, field, value, await row.get(field.name || field.uuid));
 
           // set data
           row.set(field.name || field.uuid, data);

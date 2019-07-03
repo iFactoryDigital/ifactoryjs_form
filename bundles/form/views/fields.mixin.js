@@ -58,6 +58,9 @@ class FieldsMixin extends Events {
       // form id does not match
       return true;
     }
+
+    // return false
+    return false;
   }
 
   /**
@@ -77,6 +80,9 @@ class FieldsMixin extends Events {
       // field lengths do not match
       return true;
     }
+
+    // return false
+    return false;
   }
 
   /**
@@ -119,14 +125,14 @@ class FieldsMixin extends Events {
     const children = ['left', 'right', 'children'];
 
     // return if moving
-    if (!field) return;
+    if (!field) return null;
 
     // check children
     for (const child of children) {
       // check child
       if (field[child]) {
         // remove empty fields
-        field[child] = Object.values(field[child]).filter(field => field);
+        field[child] = Object.values(field[child]).filter(f => f);
 
         // push children to flat
         field[child] = field[child].map(this.filter.fix);
@@ -149,7 +155,7 @@ class FieldsMixin extends Events {
     const children = ['left', 'right', 'children'];
 
     // return if moving
-    if (field.moving || field.removing) return;
+    if (field.moving || field.removing) return null;
 
     // check children
     for (const child of children) {
@@ -159,7 +165,7 @@ class FieldsMixin extends Events {
         field[child] = Object.values(field[child]);
 
         // push children to flat
-        field[child] = field[child].map(this.filter.place).filter(field => field);
+        field[child] = field[child].map(this.filter.place).filter(f => f);
       }
     }
 
@@ -197,7 +203,7 @@ class FieldsMixin extends Events {
       // check child
       if (field[child]) {
         // remove empty fields
-        field[child] = field[child].filter(field => field);
+        field[child] = field[child].filter(f => f);
 
         // push children to flat
         accum.push(...field[child].reduce(this.filter.flatten, []));
@@ -222,15 +228,15 @@ class FieldsMixin extends Events {
       const children = ['left', 'right', 'children'];
 
       // return if moving
-      if (field.moving || field.removing) return;
+      if (field.moving || field.removing) return null;
 
       // set field info for replace
       if (field.uuid === b.uuid) {
         // remove
-        for (const key in b) {
+        Object.keys(b).forEach((key) => {
           // set key
           field[key] = b[key];
-        }
+        });
       }
 
       // check children
@@ -241,7 +247,7 @@ class FieldsMixin extends Events {
           field[child] = Object.values(field[child]);
 
           // push children to flat
-          field[child] = field[child].map(this.filter.replace(b)).filter(field => field);
+          field[child] = field[child].map(this.filter.replace(b)).filter(f => f);
         }
       }
 

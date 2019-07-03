@@ -29,11 +29,10 @@ class EncryptField {
    * @param {req}    Request
    * @param {Object} field
    * @param {*}      value
-   * @param {*}      old
    *
    * @return {*}
    */
-  submit(req, field, value, old) {
+  submit(req, field, value) {
     // encrypt value
     const encrypted = crypto.createHmac('sha256', config.get('secret'))
       .update(value)
@@ -48,11 +47,10 @@ class EncryptField {
    *
    * @param {req}    Request
    * @param {Object} field
-   * @param {*}      value
    *
    * @return {*}
    */
-  async render(req, field, value) {
+  async render(req, field) {
     // set tag
     field.tag = 'encrypt';
     field.value = null;

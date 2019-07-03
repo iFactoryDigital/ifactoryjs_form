@@ -10,14 +10,6 @@ const fieldHelper = helper('form/field');
  */
 class Form extends Model {
   /**
-   * construct placement model
-   */
-  constructor() {
-    // run super
-    super(...arguments);
-  }
-
-  /**
    * sanitises placement
    *
    * @return {Promise}
@@ -58,4 +50,4 @@ class Form extends Model {
  * export user class
  * @type {user}
  */
-exports = module.exports = Form;
+module.exports = Form;

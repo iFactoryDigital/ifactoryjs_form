@@ -25,11 +25,10 @@ class RadioField {
    * @param {req}    Request
    * @param {Object} field
    * @param {*}      value
-   * @param {*}      old
    *
    * @return {*}
    */
-  submit(req, field, value, old) {
+  submit(req, field, value) {
     // return value
     return value;
   }
