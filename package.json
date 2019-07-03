@@ -18,15 +18,15 @@
   "homepage": "https://github.com/eden-js/form#readme",
   "devDependencies": {
     "@edenjs/eslint-config-eden": "^2.0.14",
-    "eslint": "^5.13.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jsx-a11y": "^6.2.0",
-    "eslint-plugin-react": "^7.12.4"
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.2"
   },
   "dependencies": {
-    "ajax-bootstrap-select": "^1.4.4",
-    "bootstrap-select": "^1.13.5",
+    "ajax-bootstrap-select": "^1.4.5",
+    "bootstrap-select": "^1.13.10",
     "font-awesome-filetypes": "^2.0.1",
     "geocomplete": "^1.7.0"
   }
