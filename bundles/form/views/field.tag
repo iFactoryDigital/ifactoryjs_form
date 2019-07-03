@@ -105,8 +105,8 @@
       
     // set tab
     this.tab = this.tabs[0];
-    
-  
+
+
     /**
      * on display
      *
@@ -236,7 +236,7 @@
       // set should
       return fn.call(this);
     }
-    
+
     /**
      * is tab
      *
@@ -273,7 +273,7 @@
       // return field
       return opts.field;
     }
-    
+
     /**
      * on data
      *
