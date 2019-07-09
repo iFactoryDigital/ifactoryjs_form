@@ -70,7 +70,7 @@
      */
     getElement (child) {
       // return get child
-      return (opts.getField(child) || {}).tag ? 'field-' + (opts.getField(child) || {}).tag : 'eden-loading';
+      return (opts.getField(child) || {}).tag ? `field-${opts.getField(child).tag}` : 'eden-loading';
     }
 
     /**

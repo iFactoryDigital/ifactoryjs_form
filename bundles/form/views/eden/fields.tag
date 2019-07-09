@@ -61,7 +61,7 @@
      */
     getElement (child) {
       // return get child
-      return (this.getField(child) || {}).tag ? 'field-' + (this.getField(child) || {}).tag : 'eden-loading';
+      return (this.getField(child) || {}).tag ? `field-${this.getField(child).tag}` : 'eden-loading';
     }
 
     /**

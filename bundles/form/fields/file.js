@@ -67,6 +67,7 @@ class FileField {
   async render(req, field, value) {
     // set tag
     field.tag = 'file';
+
     // eslint-disable-next-line no-nested-ternary
     field.value = value
       ? (Array.isArray(value) ? await Promise.all(value.map((item) => {
