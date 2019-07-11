@@ -586,6 +586,9 @@
         // load fields
         this.loadFields();
       }
+
+      // update on helper change
+      this.helper.on('update', this.update);
     });
   </script>
 </eden-fields>

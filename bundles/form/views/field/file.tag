@@ -6,7 +6,7 @@
           { opts.field.label }
           <i if={ !opts.field.label }>Set Label</i>
         </label>
-        <upload name={ opts.field.uuid } multi={ opts.field.multiple } image={ opts.data.value } col={ opts.field.col } type="file" show-type={ opts.field.input } />
+        <upload name={ opts.field.uuid } multi={ opts.field.multiple } image={ opts.data.value } col={ opts.field.col } type="file" show-type={ opts.field.input || 'input' } />
       </div>
     </yield>
     
