@@ -1,0 +1,91 @@
+<eden-select>
+  <select class="selectpicker form-control" name={ props.name } multiple={ props.multiple }>
+    <slot />
+  </select>
+
+  <script>
+    // import base
+    import Base from '../js/base';
+
+    // export default
+    export default class EdenSelect extends Base {
+
+      /**
+       * on before mount
+       */
+      onBeforeMount(props) {
+        // on before mount
+        super.onBeforeMount(...arguments);
+
+        // set initialized
+        this.initialized = false;
+
+      }
+
+      /**
+       * on mounted
+       */
+      onMounted(props) {
+        // check frontend
+        if (!this.eden.frontend || this.initialized) return;
+
+        // require logic
+        require('bootstrap-select/js/bootstrap-select.js');
+
+        // do select 2
+        jQuery(this.$('select')).selectpicker({
+          liveSearch : true
+        });
+
+        // ajax
+        if (props.url) {
+          // require ajax
+          require('ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min.js');
+
+          // add ajax logic
+          jQuery(this.$('select')).ajaxSelectPicker({
+            ajax : {
+              url  : props.url,
+              type : 'GET',
+              data : () => {
+                // create params
+                const params = {
+                  q : '{{{q}}}'
+                };
+
+                // return params
+                return params;
+              },
+              dataType : 'json',
+            },
+            locale : {
+              emptyTitle : props.label
+            },
+            emptyRequest : true,
+          }).on('change', (e) => {
+            // on change
+            if (props.onChange) props.onChange(e);
+          });
+        }
+      }
+
+      /**
+       * check should update
+       */
+      shouldUpdate(data) {
+        // check initialized
+        return !this.initialized;
+      }
+    
+      /**
+       * return value
+       *
+       * @return {*}
+       */
+      val() {
+        // return value
+        return jQuery(this.$('select')).val();
+      }
+    }
+  </script>
+</eden-select>
