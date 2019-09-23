@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <div class="cms-placement-fields" data-form={ get('item.id') || 'form' } data-is="eden-fields" model={ true } form={ true } for="frontend" fields={ props.fields } on-save={ onForm } type={ get('item.id') || 'form' } />
+    <div class="cms-placement-fields" data-form={ get('item.id') || 'form' } is="eden-fields" model={ form } form={ true } for="frontend" fields={ props.fields } on-save={ onForm } type={ get('item.id') || 'form' } />
 
   </div>
 
@@ -66,8 +66,6 @@
       onBeforeMount() {
         // super
         super.onBeforeMount(...arguments);
-
-        console.log(this.eden, eden.get('model'));
 
         // set update
         this.type     = this.props.type;
