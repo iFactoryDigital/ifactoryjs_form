@@ -1,5 +1,5 @@
 <field>
-  <div class={ classes({ 'eden-field eden-block' : true, 'eden-field-admin eden-block-admin' : !props.preview }) } data-field={ props.field.uuid } id={ `field-${opts.field.uuid}` }>
+  <div class={ classes({ 'eden-field eden-block' : true, 'eden-field-admin eden-block-admin' : !props.preview }) } data-field={ props.field.uuid } id={ `field-${props.field.uuid}` }>
 
     <div class={ `eden-field-hover eden-block-hover${props.isContainer ? ' eden-block-hover-dropzone' : ''}` } if={ !props.preview }>
       <div class="row row-eq-height">
@@ -10,7 +10,7 @@
         </div>
         <div class="col-4 d-flex align-items-center">
           <div class="w-100">
-            <div class="btn-group float-right">
+            <div class="btn-group float-right"> 
               <slot name="buttons" />
               <button class="btn btn-sm btn-secondary" onclick={ (e) => onUpdateSidebar(e) }>
                 <i class="fa fa-pencil-alt" />

@@ -6,7 +6,7 @@
         { form.get('title') || form.get('placement') }
       </span>
       
-      <div each={ (el, i) in getFields() } el={ el } no-reorder class={ el.class } data-is={ getElement(el) } preview={ preview } data-field={ el.uuid } data={ getField(el) } field={ el } helper={ helper } get-field={ getField } on-save={ onSaveField } on-remove={ onRemoveField } on-refresh={ onRefreshField } on-update={ onUpdate } placement={ i } i={ i } />
+      <div each={ (el, i) in getFields() } is={ getElement(el) } el={ el } class={ el.class } preview={ preview } data-field={ el.uuid } data={ getField(el) } field={ el } get-field={ getField } on-save={ onSaveField } on-remove={ onRemoveField } on-refresh={ onRefreshField } on-update={ onUpdate } placement={ i } i={ i } />
     </div>
   </div>
 
