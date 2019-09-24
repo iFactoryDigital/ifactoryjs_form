@@ -6,9 +6,7 @@
         { form.get('title') || form.get('placement') }
       </span>
       
-      <eden-add type="top" onclick={ (e) => onAddField(e) } way="unshift" form="" if={ !props.preview } />
-      <div each={ (el, i) in getFields() } el={ el } no-reorder class={ el.class } data-is={ getElement(el) } preview={ preview } data-field={ el.uuid } data={ getField(el) } field={ el } helper={ helper } get-field={ getField } on-add-field={ onAddField } on-save={ onSaveField } on-remove={ onRemoveField } on-refresh={ onRefreshField } on-update={ onUpdate } placement={ i } i={ i } />
-      <eden-add type="bottom" onclick={ (e) => onAddField(e) } way="push" form="" if={ !props.preview } />
+      <div each={ (el, i) in getFields() } el={ el } no-reorder class={ el.class } data-is={ getElement(el) } preview={ preview } data-field={ el.uuid } data={ getField(el) } field={ el } helper={ helper } get-field={ getField } on-save={ onSaveField } on-remove={ onRemoveField } on-refresh={ onRefreshField } on-update={ onUpdate } placement={ i } i={ i } />
     </div>
   </div>
 
@@ -48,6 +46,7 @@
 
         // get fields
         this.getFields = this.getFields.bind(this);
+        this.onMouseMoved = this.onMouseMoved.bind(this);
       }
 
       /**
@@ -67,6 +66,9 @@
           // on mounted
           this.onMounted();
         }
+
+        // set containers
+        this.dragula.containers = [...(this.$$('.eden-dropzone')), ...(this.$$('.eden-blocks-sidebar .list-group'))];
       }
 
       /**
@@ -115,6 +117,17 @@
       }
 
       /**
+       * on before unmount
+       */
+      onBeforeUnmount() {
+        // on before unmount
+        super.onBeforeUnmount(...arguments);
+
+        // off mousemove        
+        jQuery('body').off('mousemove', this.onMouseMoved);
+      }
+
+      /**
        * get field data
        *
        * @param  {Object} field
@@ -155,27 +168,6 @@
       getFields () {
         // return filtered fields
         return (this.form.get('positions') || []).map(this.filter.fix).filter((field) => field);
-      }
-
-      /**
-       * on add field
-       *
-       * @param  {Event} e
-       *
-       * @return {*}
-       */
-      onAddField (e) {
-        // get target
-        let target = !jQuery(e.target).is('eden-add') ? jQuery(e.target).closest('eden-add') : jQuery(e.target);
-
-        // way
-        this.way      = target.attr('way');
-        this.fieldPos = target.attr('placement');
-
-        console.log(this.refs);
-
-        // open modal
-        this.refs.sidebar.show();
       }
 
       /**
@@ -325,6 +317,25 @@
 
         // save form
         await this.saveForm();
+      }
+
+      /**
+       * on mouse moved
+       *
+       * @param {Event} e
+       */
+      onMouseMoved (e) {
+        // width
+        const maxLeft = jQuery(window).width() - jQuery('.eden-blocks-sidebar').width();
+
+        // showing
+        if (e.pageX > maxLeft && !this.refs.sidebar.state.showing) {
+          // show
+          this.refs.sidebar.show();
+        } else if (e.pageX < maxLeft && this.refs.sidebar.state.showing) {
+          // hide
+          this.refs.sidebar.hide();
+        }
       }
 
       /**
@@ -506,9 +517,10 @@
         const dotProp = require('dot-prop-immutable');
 
         // do dragula
-        this.dragula = dragula(jQuery('.eden-dropzone', this.refs.form).toArray(), {
+        this.dragula = dragula([...(this.$$('.eden-dropzone')), ...(this.$$('.eden-blocks-sidebar .list-group'))], {
           'moves' : (el, container, handle) => {
-            return (jQuery(el).is('[data-field]') || jQuery(el).closest('[data-field]').length) && (jQuery(handle).is('.move') || jQuery(handle).closest('.move').length) && (jQuery(handle).is('.move') ? jQuery(handle) : jQuery(handle).closest('.move')).attr('for') === jQuery(el).attr('data-field');
+            console.log(container);
+            return container.className.includes('list-group') || ((jQuery(el).is('[data-field]') || jQuery(el).closest('[data-field]').length) && (jQuery(handle).is('.move') || jQuery(handle).closest('.move').length) && (jQuery(handle).is('.move') ? jQuery(handle) : jQuery(handle).closest('.move')).attr('for') === jQuery(el).attr('data-field'));
           }
         }).on('drop', (el, target, source, sibling) => {
           // get current form
@@ -589,12 +601,9 @@
           // remove class
           jQuery(container).removeClass('eden-field-over');
         });
-
-        // on update
-        this.on('updated', () => {
-          // set containers
-          this.dragula.containers = jQuery('.eden-dropzone', this.root).toArray();
-        });
+        
+        // add listener
+        jQuery('body').on('mousemove', this.onMouseMoved);
       }
 
       /**

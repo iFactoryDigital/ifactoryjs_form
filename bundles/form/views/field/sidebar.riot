@@ -1,46 +1,46 @@
 <field-sidebar>
-  <div class="eden-blocks-backdrop" if={ showing } onclick={ hide } />
-  <div class={ classes({'eden-blocks-sidebar' : true, 'eden-blocks-sidebar-show' : showing}) }>
-    <div class="card">
-      <div class="card-header">
-        <h5>
-          Select Field
-        </h5>
-        
-        <ul class="nav nav-tabs card-header-tabs">
-          <li class="nav-item" each={ (tab, i) in getTabs() }>
-            <button class={ classes({'nav-link' : true, 'active' : isTab(tab)}) } onclick={ onTab }>
-              { eden.get('i18n.t')(`cms.category.${tab}`) }
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      <div class="card-body">
-        <div class="form-group">
-          <input class="form-control" placeholder="search" type="Search" onkeyup={ (e) => onSearch(e) } onchange={ (e) => onSearch(e) } ref="search" />
+  <div class="field-sidebar">
+    <div class={ classes({'eden-blocks-sidebar' : true, 'eden-blocks-sidebar-show' : get('showing')}) }>
+      <div class="card">
+        <div class="card-header">
+          <h5>
+            Select Field
+          </h5>
+          
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item" each={ (tab, i) in getTabs() }>
+              <button class={ classes({'nav-link' : true, 'active' : isTab(tab)}) } onclick={ onTab }>
+                { eden.get('i18n.t')(`cms.category.${tab}`) }
+              </button>
+            </li>
+          </ul>
         </div>
-        
-        <ul class="list-group">
-          <li each={ (field, i) in getFields(tab) || [] } class={ classes({'list-group-item list-group-item-action flex-column align-items-start' : true, 'active' : isActive(field)}) } onclick={ (e) => onField(e, field) }>
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">
-                { field.opts.title }
-              </h5>
-            </div>
-            <p class="m-0">{ field.opts.description }</p>
-          </li>
-        </ul>
-        
-      </div>
-      <div class="card-footer">
-        <button type="button" class="btn btn-secondary float-right" onclick={ hide }>Close</button>
-        <button type="button" class={ 'btn btn-primary' : true, 'disabled' : !type || loading() } disabled={ !type || loading() } onclick={ (e) => onAddField(e) }>
-          { loading('add') ? 'Adding field...' : (type ? 'Add field' : 'Select field') }
-        </button>
+
+        <div class="card-body">
+          <div class="form-group">
+            <input class="form-control" placeholder="search" type="Search" onkeyup={ (e) => onSearch(e) } onchange={ (e) => onSearch(e) } ref="search" />
+          </div>
+          
+          <ul class="list-group">
+            <li each={ (field, i) in getFields(tab) } class={ classes({'field-sidebar-item list-group-item list-group-item-action flex-column align-items-start' : true, 'active' : isActive(field)}) } onclick={ (e) => onField(e, field) }>
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">
+                  { field.opts.title }
+                </h5>
+              </div>
+              <p class="m-0">{ field.opts.description }</p>
+            </li>
+          </ul>
+          
+        </div>
+        <div class="card-footer">
+          <button type="button" class="btn btn-secondary float-right" onclick={ hide }>Close</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <div class={ classes({'eden-blocks-backdrop' : true, 'hidden' : !get('showing')}) } if={ get('showing') } onclick={ hide } />
   
   <script>
     // import base
@@ -58,7 +58,13 @@
 
         // set showing
         this.tab = 'default';
-        this.showing = false;
+        this.state = {
+          showing : false,
+        };
+
+        // bind methods
+        this.hide = this.hide.bind(this);
+        this.show = this.show.bind(this);
       }
 
       /**
@@ -66,7 +72,7 @@
       */
       show() {
         // set showing
-        this.showing = true;
+        this.state.showing = true;
 
         // update
         this.update();
@@ -77,7 +83,11 @@
       */
       hide() {
         // set showing
-        this.showing = false;
+        this.state.showing = false;
+
+        // remove element
+        const elem = this.$('.eden-blocks-backdrop');
+        elem.parentNode.removeChild(elem);
 
         // update
         this.update();
@@ -188,7 +198,7 @@
         });
         
         // return rtn
-        return rtn;
+        return rtn || [];
       }
 
       /**
