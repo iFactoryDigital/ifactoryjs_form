@@ -22,7 +22,7 @@
           </div>
           
           <ul class="list-group">
-            <li each={ (field, i) in getFields(tab) } class={ classes({'field-sidebar-item list-group-item list-group-item-action flex-column align-items-start' : true, 'active' : isActive(field)}) } onclick={ (e) => onField(e, field) }>
+            <li each={ (field, i) in getFields(tab) } class={ classes({'field-sidebar-item list-group-item list-group-item-action flex-column align-items-start' : true, 'active' : isActive(field)}) } data-type={ field.type || field.tag } onclick={ (e) => onField(e, field) }>
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">
                   { field.opts.title }
@@ -138,32 +138,6 @@
         
         // update view
         this.update();
-      }
-
-      /**
-      * on field
-      *
-      * @param  {Event} e
-      */
-      async onAddField (e) {
-        // prevent default
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // set loading
-        this.loading('add', true);
-        
-        // add field by type
-        await this.props.addField(this.type);
-        
-        // set loading
-        this.type = null;
-        
-        // set loading
-        this.loading('add', false);
-        
-        // close modal
-        jQuery(this.refs.modal).modal('hide');
       }
     
       /**

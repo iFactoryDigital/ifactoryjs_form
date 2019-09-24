@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <field-sidebar ref={ ref('sidebar') } fields={ props.fields } add-field={ onSetField } />
+  <field-sidebar ref={ ref('sidebar') } fields={ props.fields } />
 
   <script>
     // import base
@@ -326,61 +326,17 @@
        */
       onMouseMoved (e) {
         // width
+        const maxTop = jQuery(window).height() / 2;
         const maxLeft = jQuery(window).width() - jQuery('.eden-blocks-sidebar').width();
 
         // showing
-        if (e.pageX > maxLeft && !this.refs.sidebar.state.showing) {
+        if (e.pageX > maxLeft && e.pageY > maxTop && !this.refs.sidebar.state.showing) {
           // show
           this.refs.sidebar.show();
         } else if (e.pageX < maxLeft && this.refs.sidebar.state.showing) {
           // hide
           this.refs.sidebar.hide();
         }
-      }
-
-      /**
-       * adds field by type
-       *
-       * @param  {String} type
-       *
-       * @return {*}
-       */
-      async onSetField (type) {
-        // get uuid
-        const dotProp = require('dot-prop-immutable');
-
-        // create field
-        let field = {
-          'uuid' : uuid(),
-          'type' : type
-        };
-
-        // check positions
-        if (!this.form.get('positions')) this.form.set('positions', []);
-
-        // get from position
-        let pos = (this.fieldPos || '').length ? dotProp.get(this.form.get('positions'), this.fieldPos) : this.form.get('positions');
-
-        // force pos to exist
-        if (!pos && (this.fieldPos || '').length) {
-          // set pos
-          pos = [];
-
-          // set
-          dotProp.set(this.form.get('positions'), this.fieldPos, pos);
-        }
-
-        // do thing
-        pos[this.way](field);
-
-        // set flat
-        this.form.set('fields', (this.form.get('positions') || []).reduce(this.filter.flatten, []));
-
-        // save form
-        await this.onSaveField(field, {});
-
-        // update view
-        this.update();
       }
 
       /**
@@ -519,18 +475,19 @@
         // do dragula
         this.dragula = dragula([...(this.$$('.eden-dropzone')), ...(this.$$('.eden-blocks-sidebar .list-group'))], {
           'moves' : (el, container, handle) => {
-            console.log(container);
             return container.className.includes('list-group') || ((jQuery(el).is('[data-field]') || jQuery(el).closest('[data-field]').length) && (jQuery(handle).is('.move') || jQuery(handle).closest('.move').length) && (jQuery(handle).is('.move') ? jQuery(handle) : jQuery(handle).closest('.move')).attr('for') === jQuery(el).attr('data-field'));
           }
-        }).on('drop', (el, target, source, sibling) => {
-          // get current form
-          let placement = jQuery(el).attr('placement');
-
+        }).on('drop', async (el, target, source, sibling) => {
           // get parent
-          target = jQuery(el).parent()[0];
+          target = el.parentNode;
+
+          // get current form
+          let addedField = {};
+          const placement = el.getAttribute('placement') || null;
+          const position = target.getAttribute('data-placement');
 
           // check target
-          if (!target || !source || !el || (target && !jQuery(target).hasClass('eden-dropzone'))) return;
+          if (!target || !source || !el || (target && !target.className.includes('eden-dropzone'))) return;
 
           // get fields of target
           let fields = [];
@@ -539,24 +496,34 @@
           let positions = (this.form.get('positions') || []).map(this.filter.fix).filter((field) => field);
 
           // set moving on field
-          positions = dotProp.set(positions, placement + '.moving', true);
+          if (placement) positions = dotProp.set(positions, placement + '.moving', true);
 
           // loop physical fields
-          jQuery('> [data-field]', target).each((i, field) => {
+          target.childNodes.forEach((field) => {
+            // check placement
+            if (!field.getAttribute) return;
+            if (!field.getAttribute('data-type') && !field.getAttribute('placement')) return;
+            
             // set get from
-            let getFrom = jQuery(field).attr('placement');
-            let gotField = dotProp.get(positions, getFrom);
+            let getFrom = field.getAttribute('placement') || null;
+            let gotField = getFrom ? dotProp.get(positions, getFrom) : null;
 
             // return on no field
-            if (!gotField) return;
+            if (!gotField && placement) return;
 
             // clone field
-            if (getFrom === placement) {
+            if (getFrom === placement || field.getAttribute('data-type') === el.getAttribute('data-type')) {
               // clone field
-              gotField = JSON.parse(JSON.stringify(gotField));
+              gotField = gotField ? JSON.parse(JSON.stringify(gotField)) : {
+                type : el.getAttribute('data-type'),
+                uuid : uuid(),
+              };
 
               // delete placing
               if (gotField.moving) delete gotField.moving;
+
+              // set field
+              addedField = gotField;
             }
 
             // get actual field
@@ -568,9 +535,14 @@
           this.update();
 
           // set form
-          if (jQuery(target).attr('data-placement').length) {
+          if (position.length) {
+            // get
+            if (!dotProp.get(positions, position)) {
+              positions = dotProp.set(positions, position, []);
+            }
+
             // set positions
-            positions = dotProp.set(positions, jQuery(target).attr('data-placement'), fields);
+            positions = dotProp.set(positions, position, fields);
           } else {
             // set positions
             positions = fields;
@@ -586,20 +558,23 @@
           this.updating = false;
           this.update();
 
+          // save form
+          if (!placement) await this.onSaveField(addedField, {});
+
           // save
           this.saveForm();
         }).on('drag', (el, source) => {
           // add is dragging
-          jQuery(this.$('[ref="form"]')).addClass('is-dragging');
+          
         }).on('dragend', () => {
           // remove is dragging
-          jQuery(this.$('[ref="form"]')).removeClass('is-dragging');
+          
         }).on('over', function (el, container) {
           // add class
-          jQuery(container).addClass('eden-field-over');
+          
         }).on('out', function (el, container) {
           // remove class
-          jQuery(container).removeClass('eden-field-over');
+          
         });
         
         // add listener
