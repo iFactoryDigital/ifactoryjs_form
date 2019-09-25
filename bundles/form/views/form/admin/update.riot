@@ -56,6 +56,7 @@
   <script>
     // import base
     import Base from '../../js/base';
+    import ModelMixin from '../../js/model';
 
     // export default
     export default class FormUpdatePage extends Base {
@@ -67,13 +68,16 @@
         // super
         super.onBeforeMount(...arguments);
 
+        // model mixin
+        ModelMixin(this);
+
         // set update
         this.type     = this.props.type;
-        this.form     = eden.get('model.add')('form', this.props.item.id, this.props.item);
+        this.form     = this.model('form', this.props.item);
         this.updating = {};
 
         // load data
-        this.languages = eden.get('i18n').lngs || [];
+        this.languages = this.eden.get('i18n').lngs || [];
 
         // is update
         this.isUpdate = false;
@@ -149,10 +153,10 @@
           // change url
           let state = Object.assign({}, {
             'prevent' : true
-          }, eden.router.history.location.state);
+          }, this.eden.get('router.history.location.state'));
           
           // replace state
-          eden.router.history.replace({
+          this.eden.get('router.history.replace')({
             'state'    : state,
             'pathname' : '/admin/form/' + data.result.id + '/update'
           });

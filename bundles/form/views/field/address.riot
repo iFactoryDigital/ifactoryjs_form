@@ -71,9 +71,8 @@
         */
       initialize () {
         // let input
-        let input = this.$('[type="text"]');
-        console.log(input);
-        let index = input.getAttribute('data-index');
+        const input = this.$('[type="text"]');
+        const index = input.getAttribute('data-index');
 
         // build geocomplete
         jQuery(input).geocomplete().on('geocode:result', (e, result) => {
