@@ -16,6 +16,7 @@
     // import base
     import uuid from 'uuid';
     import Base from '../js/base';
+    import Model from '../js/model';
 
     // export default
     export default class EdenFields extends Base {
@@ -29,8 +30,11 @@
         // super on before mount
         super.onBeforeMount(...arguments);
 
+        // do mixin
+        Model(this);
+
         // set update
-        this.form     = props.form ? (props.model ? props.model : this.eden.get('model.add')('form', props.form.id, props.form)) : this.eden.get('model.add')('form', null, {});
+        this.form     = props.form ? (props.model ? props.model : this.model('form', props.form)) : this.model('form', {});
         this.type     = props.type;
         this.fields   = (props.form || {}).render || [];
         this.preview  = !!props.preview;
@@ -84,7 +88,7 @@
         if (!this.eden.frontend) return;
 
         // set form
-        this.form = props.form ? (props.model ? props.model : this.eden.get('model.add')('form', props.form.id, props.form)) : this.eden.get('model.add')('form', null, {});
+        this.form = props.form ? (props.model ? props.model : this.model('form', props.form)) : this.model('form', {});
 
         // init dragula
         if (!this.dragula && this.eden.get('user.acl.validate')('admin')) this.initDragula();
