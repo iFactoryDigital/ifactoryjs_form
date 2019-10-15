@@ -18,4 +18,4 @@ deploy:
     secure: KRO9LyREaqE2+Lbg/i7rqOXJMIODXQSfy7rKxqOoyyz+jiEXMOk5BktcQuJZ25u45RHNOqt4pjiXgaQ0FevbzPO7BuJnJfge6SW0WJBXC44cEyuBS2Ds7AVzFRA7gJ/FQNPxiEuXXl5eMAXi9tQpoNTo/0/kPz4dbHRRr/1BOXCNtqR+9sKJzy8cbWgQKQDMZgBWztDmg2FF1UhB5Qq1kqQILMdZfzg1WrsX9kJmHEJeE6p4ZyEkPyu5IWUHoVA7iJ/++Yb3j/O0NgijVaJk6M4bDg1Gi3jSXNjrFJ/gY0bIxv4IxCoJ19itRgJnIumgsKjTzy+QbWLhZqoJ1sk2gD+wN02rlHj5ySCM1Bq/ZWPVZGLL4ZZ7kawgDWmoY636/xUOfJB1CIhYmXCmHjqVe5Dr3MUxX9r3YfN2zFMJA8ylV1Ojt3AM2WsUpZgmjtaIRpSQQR9Zoo7g7cJf4Cj8BkRB+F0FEMkDwJld/5t/bhJsSg7jyt+fxhL6S5247v5quJKi1VA6AyiKPmK7nQJbxqlbvyOIAA74iuiVI4mJ9mJtyTLQYiC5/RnKqxooU58Ib2YkIyapx+7m/z2vvfhNWesCn5VpwYi8ywD+LsJeMgLlduTCZBpw6aYr55mSG1O+jYCDqNp+Ma92BSggu3qpzh4BHiOtZWt3zNiyQAozaHE=
   on:
     tags: true
-    repo: eden-js/form
+    repo: ifactorydigital/ifactoryjs_form
