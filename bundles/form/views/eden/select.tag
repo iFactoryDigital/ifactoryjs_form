@@ -53,7 +53,8 @@
             data : () => {
               // create params
               const params = {
-                q : '{{{q}}}'
+                q   : '{{{q}}}',
+                data: opts.data ? opts.data : ''
               };
 
               // return params
