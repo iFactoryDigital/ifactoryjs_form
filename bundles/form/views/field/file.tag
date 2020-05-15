@@ -2,7 +2,7 @@
   <field ref="field" is-input={ true } class="field-container-inner" on-input={ onInput } is-multiple={ true } get-fields={ getFields } get-element={ getElement } on-col={ onCol }>
     <yield to="body">
       <div class="form-group">
-        <label for={ opts.field.uuid }>
+        <label for={ opts.field.uuid } if={ opts.field.label }>
           { opts.field.label }
           <i if={ !opts.field.label }>Set Label</i>
         </label>

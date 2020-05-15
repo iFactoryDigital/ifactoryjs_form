@@ -94,11 +94,9 @@
           <input type="text" name={ opts.field.uuid + '[geo]' } ref="search" required={ opts.field.required } class={ opts.field.field || 'form-control' } placeholder="Enter Address" id={ opts.field.uuid + '-geo' } autocomplete="off">
           <div class="input-group-append">
             <div class="btn-group">
-              <!--
               <button class={ 'btn btn-info' : true, 'disabled' : opts.loading() } onclick={ opts.loading() ? null : opts.onSearchButton } type="button" disabled={ opts.loading() } data-toggle="tooltip" title="Search for Address">
                 <i class={ 'fa' : true, 'fa-search' : !opts.loading(), 'fa-spinner fa-spin' : opts.loading() } />
               </button>
-              -->
               <button class={ 'btn' : true, 'btn-info' : !opts.showMap, 'btn-success' : opts.showMap } onclick={ opts.onShowMap } type="button" data-toggle="tooltip" title={ opts.showMap ? 'Hide Map' : 'Show Map' }>
                 <i class="fa fa-map-marked" />
               </button>

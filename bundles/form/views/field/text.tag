@@ -1,5 +1,10 @@
 <field-text>
-  <field ref="field" is-input={ true } class="field-container-inner" on-container-class={ onFieldClass } get-fields={ getFields } get-element={ getElement } on-min-length={ onMinLength } on-max-length={ onMaxLength } language={ this.language } languages={ languages } on-change={ onChange }>
+  <field ref="field" class="field-container-inner" on-container-class={ onFieldClass } get-fields={ getFields } get-element={ getElement } if={ opts.field.name && opts.field.name.includes('_signature') }>
+    <yield to="body">
+      <customer-signature signature={ opts.data.value ? opts.data.value : '' } fieldname={ opts.field.uuid } />
+    </yield>
+  </field>
+  <field ref="field" is-input={ true } class="field-container-inner" on-container-class={ onFieldClass } get-fields={ getFields } get-element={ getElement } on-min-length={ onMinLength } on-max-length={ onMaxLength } language={ this.language } languages={ languages } on-change={ onChange } if={ !opts.field.name || !opts.field.name.includes('_signature') }>
     <yield to="body">
       <div if={ opts.field.i18n } each={ lng, i in opts.languages } hide={ i18n.lang() !== lng }>
         <validate type="text" group-class={ opts.field.group || 'form-group' } name="{ opts.field.uuid }[{ lng }]" label={ opts.field.label || 'Set Label' } data-value={ (opts.data.value || '')[lng] || opts.data.value } required={ opts.field.required } on-change={ opts.onChange } min-length={ (opts.field.validateLength || {}).min } max-length={ (opts.field.validateLength || {}).max } append="field-i18n" />
