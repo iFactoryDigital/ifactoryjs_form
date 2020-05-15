@@ -1,0 +1,62 @@
+{
+  "_args": [
+    [
+      "@edenjs/form@1.3.7",
+      "/var/www/ifactory.dev/h/homebuilder/homebuilder.ifactory.dev.john"
+    ]
+  ],
+  "_from": "@edenjs/form@1.3.7",
+  "_id": "@edenjs/form@1.3.7",
+  "_inBundle": false,
+  "_integrity": "sha512-3zSaYmy5bHjtRF0fLAJ26s6moS2X0oMxGZIu8wJfYjlohbNOk6SkXD2lfT8Eq5dDtTj4bj2OwK7WswQ7mO5mGw==",
+  "_location": "/@edenjs/form",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@edenjs/form@1.3.7",
+    "name": "@edenjs/form",
+    "escapedName": "@edenjs%2fform",
+    "scope": "@edenjs",
+    "rawSpec": "1.3.7",
+    "saveSpec": null,
+    "fetchSpec": "1.3.7"
+  },
+  "_requiredBy": [
+    "/@edenjs/core"
+  ],
+  "_resolved": "https://registry.npmjs.org/@edenjs/form/-/form-1.3.7.tgz",
+  "_spec": "1.3.7",
+  "_where": "/var/www/ifactory.dev/h/homebuilder/homebuilder.ifactory.dev.john",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/eden-js/form/issues"
+  },
+  "dependencies": {
+    "ajax-bootstrap-select": "^1.4.4",
+    "bootstrap-select": "^1.13.5",
+    "font-awesome-filetypes": "^2.0.1",
+    "geocomplete": "^1.7.0"
+  },
+  "description": "",
+  "devDependencies": {
+    "@edenjs/eslint-config-eden": "^2.0.14",
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.0",
+    "eslint-plugin-react": "^7.12.4"
+  },
+  "homepage": "https://github.com/eden-js/form#readme",
+  "license": "ISC",
+  "main": "edenconfig.js",
+  "name": "@edenjs/form",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eden-js/form.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.3.7"
+}

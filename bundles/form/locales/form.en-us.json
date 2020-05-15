@@ -1,0 +1,41 @@
+{
+  "update" : {
+    "child"  : {
+      "name"   : "Section Name",
+      "type"   : "Section Type",
+      "title"  : "Section: %s",
+      "create" : "Add Field"
+    }
+  },
+  "tooltip" : {
+    "create" : "Create %s",
+    "update" : "Update %s",
+    "remove" : "Remove %s"
+  },
+  "form"         : "Form",
+  "view"         : "View %s",
+  "title"        : "Customise %s",
+  "error"        : {
+    "form"  : {
+      "exist"      : "That form does not exist",
+      "authorised" : "You are not authorised to remove this form"
+    },
+    "exist" : "That %s does not exist"
+  },
+  "submit"       : "Submit",
+  "success"      : {
+    "form"   : {
+      "create" : "Successfully created form %s",
+      "update" : "Successfully updated form %s",
+      "remove" : "Successfully removed form %s"
+    },
+    "create" : "Successfully created %s",
+    "update" : "Successfully updated %s",
+    "remove" : "Successfully removed %s"
+  },
+  "confirm"      : {
+    "remove" : "Are you sure you want to delete this %s?"
+  },
+  "nonexist"     : "That %s does not exist",
+  "unauthorized" : "You are not authorised to access this %s"
+}
