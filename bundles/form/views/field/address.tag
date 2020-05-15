@@ -1,5 +1,5 @@
 <field-address>
-  <field ref="field" is-input={ true } is-multiple={ true } name={ opts.name } class="field-container-inner" values={ this.value } data-value={ this.current } label-class={ opts.labelClass } has-field={ opts.hasField } on-new={ onNew } on-remove={ onRemove } on-item={ onItem } get-fields={ getFields } get-element={ getElement } loading={ this.loading } on-search={ onSearch } on-search-button={ onSearchButton } show-map={ this.showMap } on-show-map={ onShowMap } show-manual={ this.showManual } on-show-manual={ onShowManual } get-selected={ getSelected } on-manual-value={ onManualValue } >
+  <field ref="field" is-input={ true } is-multiple={ true } name={ opts.name } class="field-container-inner" values={ this.value } data-value={ this.current } label-class={ opts.labelClass } has-field={ opts.hasField } on-new={ onNew } on-remove-button={ onRemove } on-item={ onItem } get-fields={ getFields } get-element={ getElement } loading={ this.loading } on-search={ onSearch } on-search-button={ onSearchButton } show-map={ this.showMap } on-show-map={ onShowMap } show-manual={ this.showManual } on-show-manual={ onShowManual } get-selected={ getSelected } on-manual-value={ onManualValue } >
     <yield to="body">
       <div class={ opts.field.group || 'form-group' }>
         <label for={ opts.field.uuid + '-geo' } class={ opts.labelClass }>
@@ -117,7 +117,7 @@
                 New Address
               </button>
             </div>
-            <button class="btn btn-danger" onclick={ opts.onRemove } if={ opts.values.length > 1 }>
+            <button class="btn btn-danger" onclick={ opts.onRemoveButton } if={ opts.values.length > 1 }>
               <i class="fa fa-times" />
             </button>
           </div>
