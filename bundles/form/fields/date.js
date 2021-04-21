@@ -32,6 +32,10 @@ class DateField {
   submit(req, field, value, old) {
     // try catch
     try {
+      if (value && value.split('-') && value.split('-').length > 2 && value.split('-')[0].length === 2) {
+        value = `${value.split('-')[2]}-${value.split('-')[1]}-${value.split('-')[0]}`;
+      }
+
       // let date
       let date = new Date(value);
 
